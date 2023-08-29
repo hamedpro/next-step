@@ -1,7 +1,3 @@
-export type env = {
-	api_port: number;
-	ui_port: number;
-};
 export type roadmap = {
 	title: string;
 	description: string;
