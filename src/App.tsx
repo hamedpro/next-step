@@ -1,10 +1,12 @@
 import "primereact/resources/themes/lara-light-indigo/theme.css";
 import "primereact/resources/primereact.min.css";
+import "bootstrap-icons/font/bootstrap-icons.css";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { RoadMaps } from "./components/RoadMaps";
 import { RoadMap } from "./components/RoadMap";
-import { context, context_value } from "freeflow-react/dist/index";
+import { context } from "freeflow-react";
 import { useContext, useEffect } from "react";
+import { ImportRoadMap } from "./components/ImportRoadMap";
 import { NewRoadMap } from "./components/NewRoadMap";
 function App() {
 	var freeflow_context = useContext(context);
@@ -14,6 +16,9 @@ function App() {
 			profiles_seed: [{ user_id: 0, max_depth: undefined, is_active: true, jwt: undefined }],
 		}));
 	}, []);
+	/* useEffect(() => {
+		console.log(freeflow_context.cache);
+	}, [JSON.stringify(freeflow_context.cache)]); */
 
 	return (
 		<BrowserRouter>
@@ -29,6 +34,10 @@ function App() {
 				<Route
 					element={<RoadMap />}
 					path="/roadmaps/:roadmap_id"
+				/>
+				<Route
+					element={<ImportRoadMap />}
+					path="/roadmaps/import"
 				/>
 				<Route
 					element={<NewRoadMap />}
