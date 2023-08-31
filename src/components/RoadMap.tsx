@@ -16,7 +16,6 @@ export const RoadMap = () => {
 	if (roadmap === undefined) return `404 - there is no RoadMap with id = ${roadmap_id}`;
 
 	var dot = roadmap_layers_to_dot(roadmap.thing.value.layers);
-
 	return (
 		<div>
 			<h1>RoadMap</h1>
