@@ -1,3 +1,5 @@
+import { thing_base } from "freeflow-core/dist/UnifiedHandler_types";
+
 export type resource = {
 	title: string;
 	link: string;
@@ -8,10 +10,8 @@ export type step = {
 	title: string;
 	description: string;
 	weight: number;
-	id: number;
 	resources: resource[];
 	laboratory: laboratory;
-	points_to?: number[];
 };
 export type roadmap = {
 	layers: layer[];
@@ -21,3 +21,7 @@ export type roadmap = {
 export type store = {
 	roadmaps: roadmap[];
 };
+export interface roadmap_thing extends thing_base {
+	type: "roadmap";
+	value: roadmap;
+}

@@ -1,6 +1,7 @@
 import "primereact/resources/themes/lara-light-indigo/theme.css";
 import "primereact/resources/primereact.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
+import "./tailwind_output.css";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { RoadMaps } from "./components/RoadMaps";
 import { RoadMap } from "./components/RoadMap";
@@ -8,6 +9,8 @@ import { context } from "freeflow-react";
 import { useContext, useEffect } from "react";
 import { ImportRoadMap } from "./components/ImportRoadMap";
 import { NewRoadMap } from "./components/NewRoadMap";
+import { EditRoadMap } from "./components/EditRoadMap";
+import { RoadMapIndex } from "./components/RoadMapIndex";
 function App() {
 	var freeflow_context = useContext(context);
 	useEffect(() => {
@@ -32,8 +35,8 @@ function App() {
 					path="/roadmaps"
 				/>
 				<Route
-					element={<RoadMap />}
-					path="/roadmaps/:roadmap_id"
+					element={<RoadMapIndex />}
+					path="/roadmaps/:roadmap_id/*"
 				/>
 				<Route
 					element={<ImportRoadMap />}
