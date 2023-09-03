@@ -4,24 +4,24 @@ export type resource = {
 	title: string;
 	link: string;
 };
-export type layer = step[];
-export type laboratory = any;
 export type step = {
 	title: string;
 	description: string;
 	weight: number;
 	resources: resource[];
-	laboratory: laboratory;
+	laboratory: any;
+	connects_to: number[];
+	roadmap_id: number;
 };
 export type roadmap = {
-	layers: layer[];
 	title: string;
 	description: string;
-};
-export type store = {
-	roadmaps: roadmap[];
 };
 export interface roadmap_thing extends thing_base {
 	type: "roadmap";
 	value: roadmap;
+}
+export interface step_thing extends thing_base {
+	type: "step";
+	value: step;
 }

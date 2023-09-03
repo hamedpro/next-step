@@ -4,19 +4,23 @@ import "bootstrap-icons/font/bootstrap-icons.css";
 import "./tailwind_output.css";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { RoadMaps } from "./components/RoadMaps";
-import { RoadMap } from "./components/RoadMap";
+import { RoadMapRoute } from "./components/RoadMapRoute";
 import { context } from "freeflow-react";
 import { useContext, useEffect } from "react";
-import { ImportRoadMap } from "./components/ImportRoadMap";
 import { NewRoadMap } from "./components/NewRoadMap";
-import { EditRoadMap } from "./components/EditRoadMap";
-import { RoadMapIndex } from "./components/RoadMapIndex";
 function App() {
 	var freeflow_context = useContext(context);
 	useEffect(() => {
 		freeflow_context.set_state((prev) => ({
 			...prev,
-			profiles_seed: [{ user_id: 0, max_depth: undefined, is_active: true, jwt: undefined }],
+			profiles_seed: [
+				{ user_id: 0, max_depth: undefined, is_active: false, jwt: undefined },
+				{
+					user_id: -1,
+					jwt: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjotMSwiZXhwIjoxNjk0Mjc2MzkxLCJpYXQiOjE2OTM2NzE1OTB9.zpH0ONCZb47fZd7jXwGlYZ7KeswQ7vGqvc11Is28oH0",
+					is_active: true,
+				},
+			],
 		}));
 	}, []);
 	/* useEffect(() => {
@@ -35,13 +39,10 @@ function App() {
 					path="/roadmaps"
 				/>
 				<Route
-					element={<RoadMapIndex />}
+					element={<RoadMapRoute />}
 					path="/roadmaps/:roadmap_id/*"
 				/>
-				<Route
-					element={<ImportRoadMap />}
-					path="/roadmaps/import"
-				/>
+
 				<Route
 					element={<NewRoadMap />}
 					path="/roadmaps/new"
