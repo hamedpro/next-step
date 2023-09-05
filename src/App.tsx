@@ -7,7 +7,7 @@ import { RoadMaps } from "./components/RoadMaps";
 import { context } from "freeflow-react";
 import { useContext, useEffect } from "react";
 import { NewRoadMap } from "./components/NewRoadMap";
-import { Root } from "./Root";
+import { Root } from "./components/Root";
 import { ThingRoute } from "./components/ThingRoute";
 function App() {
 	var freeflow_context = useContext(context);

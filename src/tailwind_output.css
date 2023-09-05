@@ -2,6 +2,10 @@
   visibility: visible
 }
 
+.sticky {
+  position: sticky
+}
+
 .block {
   display: block
 }
@@ -22,8 +26,35 @@
   cursor: pointer
 }
 
+.items-center {
+  align-items: center
+}
+
+.break-all {
+  word-break: break-all
+}
+
 .rounded-lg {
   border-radius: 0.5rem
+}
+
+.text-lg {
+  font-size: 1.125rem;
+  line-height: 1.75rem
+}
+
+.text-xl {
+  font-size: 1.25rem;
+  line-height: 1.75rem
+}
+
+.text-black {
+  --tw-text-opacity: 1;
+  color: rgb(0 0 0 / var(--tw-text-opacity))
+}
+
+.underline {
+  text-decoration-line: underline
 }
 
 .filter {
@@ -37,6 +68,11 @@
 .hover\:bg-gray-200:hover {
   --tw-bg-opacity: 1;
   background-color: rgb(229 231 235 / var(--tw-bg-opacity))
+}
+
+.hover\:bg-gray-700:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(55 65 81 / var(--tw-bg-opacity))
 }
 
 .hover\:px-1:hover {
