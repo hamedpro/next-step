@@ -24,8 +24,8 @@ function App() {
 		}));
 	}, []);
 	/* useEffect(() => {
-		console.log(freeflow_context.cache);
-	}, [JSON.stringify(freeflow_context.cache)]); */
+		console.log(freeflow_context.profiles_seed);
+	}, [JSON.stringify(freeflow_context.profiles_seed)]); */
 
 	return (
 		<BrowserRouter>

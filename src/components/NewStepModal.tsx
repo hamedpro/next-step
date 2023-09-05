@@ -1,4 +1,4 @@
-import { cache_item, profile, profile_seed, thing } from "freeflow-core/dist/UnifiedHandler_types";
+import { cache_item, profile, profile_seed } from "freeflow-core/dist/UnifiedHandler_types";
 import { find_active_profile, find_active_profile_seed } from "freeflow-core/dist/utils";
 import { context } from "freeflow-react";
 import { MultiSelect } from "primereact/multiselect";

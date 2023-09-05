@@ -25,3 +25,4 @@ export interface step_thing extends thing_base {
 	type: "step";
 	value: step;
 }
+var a: number | { name: string } = 22;

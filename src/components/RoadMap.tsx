@@ -71,6 +71,8 @@ export const RoadMap = ({
 		freeflow_context.profiles_seed
 	);
 	var is_admin = current_profile_seed !== undefined && current_profile_seed.user_id === -1;
+	var dot = roadmap_to_dot(freeflow_context.cache, roadmap);
+	console.log(dot);
 	return (
 		<>
 			<NewStepModal
@@ -153,7 +155,7 @@ export const RoadMap = ({
 				) : (
 					<Graphviz
 						options={{ useWorker: false }}
-						dot={roadmap_to_dot(freeflow_context.cache, roadmap)}
+						dot={dot}
 					/>
 				)}
 			</div>
