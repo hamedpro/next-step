@@ -13,6 +13,7 @@ import { ToggleButton } from "primereact/togglebutton";
 import { find_active_profile_seed } from "freeflow-core/dist/utils";
 import { InputTextarea } from "primereact/inputtextarea";
 import { CustomTitle } from "./CustomTitle";
+import { CustomCard } from "./CustomCard";
 export const Step = ({ step }: { step: cache_item<step_thing> }) => {
 	var [use_admin_mode, set_use_admin_mode] = useState(false);
 	var { cache, request_new_transaction, unresolved_cache, rest_endpoint, profiles_seed } =
@@ -52,54 +53,95 @@ export const Step = ({ step }: { step: cache_item<step_thing> }) => {
 	var roadmap_steps = cache.filter(
 		(ci) => ci.thing.type === "step" && ci.thing.value.roadmap_id === parent?.thing_id
 	);
+	var is_admin = current_profile_seed !== undefined && current_profile_seed.user_id === -1;
+	var change_mode = is_admin && use_admin_mode;
 	return (
-		<div style={{ padding: "8px" }}>
+		<div style={{ padding: "12px" }}>
 			<div style={{ display: "flex", justifyContent: "space-between" }}>
 				<CustomTitle
 					text={step.thing.value.title}
 					back_link={`/${step.thing.value.roadmap_id}`}
 				/>
-				<div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-					{current_profile_seed !== undefined && current_profile_seed.user_id === -1 && (
+				<div
+					style={{ alignItems: "center", gap: "10px" }}
+					className="hidden sm:flex"
+				>
+					{is_admin && (
+						<>
+							<ToggleButton
+								checked={use_admin_mode}
+								onChange={(e) => set_use_admin_mode(e.value)}
+								onLabel="Edit Mode On"
+								offLabel="Editing Mode Off"
+							/>
+							<Button
+								style={{ height: "fit-content" }}
+								onClick={save_changes}
+								disabled={
+									JSON.stringify(new_step) === JSON.stringify(step.thing.value)
+								}
+							>
+								Save Changes
+							</Button>
+						</>
+					)}
+				</div>
+			</div>
+			<div
+				className="sm:hidden flex"
+				style={{ gap: "10px" }}
+			>
+				{current_profile_seed !== undefined && current_profile_seed.user_id === -1 && (
+					<>
 						<ToggleButton
 							checked={use_admin_mode}
 							onChange={(e) => set_use_admin_mode(e.value)}
 							onLabel="Edit Mode On"
 							offLabel="Editing Mode Off"
+							style={{ width: "50%" }}
 						/>
-					)}
-					<Button
-						style={{ height: "fit-content" }}
-						onClick={save_changes}
-						disabled={JSON.stringify(new_step) === JSON.stringify(step.thing.value)}
-					>
-						Save Changes
-					</Button>
-				</div>
+						<Button
+							onClick={save_changes}
+							disabled={JSON.stringify(new_step) === JSON.stringify(step.thing.value)}
+							style={{ width: "50%", display: "flex", justifyContent: "center" }}
+						>
+							Save Changes
+						</Button>
+					</>
+				)}
 			</div>
 			<div style={{ display: "flex", flexDirection: "column" }}>
-				<p style={{ marginTop: "0px" }}>Title:</p>
-				<InputText
-					value={new_step.title}
-					onChange={(e) => {
-						set_new_step((prev) => ({ ...prev, title: e.target.value }));
-					}}
-					style={{ width: "100%" }}
-				/>
+				<p style={{ marginTop: "20px" }}>Title:</p>
+				{change_mode === true ? (
+					<InputText
+						value={new_step.title}
+						onChange={(e) => {
+							set_new_step((prev) => ({ ...prev, title: e.target.value }));
+						}}
+						style={{ width: "100%" }}
+					/>
+				) : (
+					<CustomCard>{new_step.title}</CustomCard>
+				)}
 
 				<p>Description:</p>
-				<InputTextarea
-					value={new_step.description}
-					onChange={(e) => {
-						set_new_step((prev) => ({ ...prev, description: e.target.value }));
-					}}
-					rows={5}
-					style={{ width: "100%" }}
-				/>
+				{change_mode === true ? (
+					<InputTextarea
+						value={new_step.description}
+						onChange={(e) => {
+							set_new_step((prev) => ({ ...prev, description: e.target.value }));
+						}}
+						rows={5}
+						style={{ width: "100%" }}
+					/>
+				) : (
+					<CustomCard>{new_step.description}</CustomCard>
+				)}
 			</div>
 			<p>weight:</p>
 
 			<Rating
+				disabled={change_mode === false}
 				style={{ marginBottom: "20px" }}
 				value={new_step.weight}
 				onChange={(e) =>
@@ -126,61 +168,87 @@ export const Step = ({ step }: { step: cache_item<step_thing> }) => {
 					header="Link"
 				/>
 			</DataTable>
-			<p style={{ margin: "15px 0px 10px 0px " }}>Add New Resources:</p>
-			<div
-				style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "28px" }}
-			>
-				<InputText
-					style={{ flexGrow: 1 }}
-					value={new_resource["title"]}
-					placeholder="Enter a title"
-					onChange={(e) => {
-						set_new_resource((prev) => ({ ...prev, title: e.target.value }));
-					}}
-				/>
+			{change_mode && (
+				<>
+					<p style={{ margin: "15px 0px 10px 0px " }}>Add New Resources:</p>
+					<div
+						style={{
+							alignItems: "center",
+							gap: "10px",
+							marginBottom: "28px",
+							width: "100%",
+						}}
+						className="flex flex-col sm:flex-row"
+					>
+						<InputText
+							className="w-full"
+							value={new_resource["title"]}
+							placeholder="Enter a title"
+							onChange={(e) => {
+								set_new_resource((prev) => ({ ...prev, title: e.target.value }));
+							}}
+						/>
 
-				<InputText
-					style={{ flexGrow: 3 }}
-					value={new_resource["link"]}
-					placeholder="Enter a link"
-					onChange={(e) => {
-						set_new_resource((prev) => ({ ...prev, link: e.target.value }));
-					}}
-				/>
-				<Button
-					onClick={() => {
+						<InputText
+							className="grow w-full"
+							value={new_resource["link"]}
+							placeholder="Enter a link"
+							onChange={(e) => {
+								set_new_resource((prev) => ({ ...prev, link: e.target.value }));
+							}}
+						/>
+						<Button
+							className="w-full"
+							style={{
+								display: "flex",
+								justifyContent: "center",
+								alignItems: "center",
+							}}
+							onClick={() => {
+								set_new_step((prev) => ({
+									...prev,
+									resources: [...prev.resources, new_resource],
+								}));
+								set_new_resource({ title: "", link: "" });
+							}}
+						>
+							Add
+						</Button>
+					</div>
+				</>
+			)}
+
+			<hr style={{ margin: "28px 0px " }} />
+			<p style={{ marginTop: "24px" }}>Next Steps: </p>
+			{change_mode === true ? (
+				<MultiSelect
+					options={roadmap_steps.map((ci) => ({
+						title: ci.thing.value.title,
+						code: ci.thing_id,
+					}))}
+					value={new_step["connects_to"].map((thing_id) => ({
+						title: roadmap_steps.find((ci) => ci.thing_id === thing_id)?.thing.value
+							.title,
+						code: thing_id,
+					}))}
+					onChange={(e) =>
 						set_new_step((prev) => ({
 							...prev,
-							resources: [...prev.resources, new_resource],
-						}));
-						set_new_resource({ title: "", link: "" });
-					}}
-				>
-					Add
-				</Button>
-			</div>
-			<hr />
-			<p style={{ marginTop: "24px" }}>Next Steps: </p>
-			<MultiSelect
-				options={roadmap_steps.map((ci) => ({
-					title: ci.thing.value.title,
-					code: ci.thing_id,
-				}))}
-				value={new_step["connects_to"].map((thing_id) => ({
-					title: roadmap_steps.find((ci) => ci.thing_id === thing_id)?.thing.value.title,
-					code: thing_id,
-				}))}
-				onChange={(e) =>
-					set_new_step((prev) => ({
-						...prev,
-						connects_to: e.value.map(
-							({ code, title }: { code: number; title: string }) => code
-						),
-					}))
-				}
-				optionLabel="title"
-				style={{ color: "black" }}
-			/>
+							connects_to: e.value.map(
+								({ code, title }: { code: number; title: string }) => code
+							),
+						}))
+					}
+					optionLabel="title"
+					style={{ color: "black" }}
+				/>
+			) : (
+				new_step["connects_to"].map((thing_id) => (
+					<Button key={thing_id}>
+						{roadmap_steps.find((ci) => ci.thing_id === thing_id)?.thing.value.title}
+					</Button>
+				))
+			)}
 		</div>
 	);
 };

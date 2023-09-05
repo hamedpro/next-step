@@ -8,6 +8,7 @@ import { roadmap } from "../../types";
 import { find_active_profile } from "freeflow-core/dist/utils";
 import { profile } from "freeflow-core/dist/UnifiedHandler_types";
 import { Toast } from "primereact/toast";
+import { CustomTitle } from "./CustomTitle";
 export const NewRoadMap = () => {
 	//const toast_ref = useRef<Toast>(null);
 	var freeflow_context = useContext(context);
@@ -34,9 +35,19 @@ export const NewRoadMap = () => {
 		nav(`/${thing_id}`);
 	}
 	return (
-		<div style={{ display: "flex", flexDirection: "column", flexWrap: "wrap" }}>
-			<h1>NewRoadMap</h1>
-			<label htmlFor="title_input">title:</label>
+		<div
+			style={{
+				display: "flex",
+				flexDirection: "column",
+				flexWrap: "wrap",
+				maxWidth: "500px",
+			}}
+		>
+			<CustomTitle
+				back_link="roadmaps"
+				text="New RoadMap"
+			/>
+			<label>title:</label>
 			<InputText
 				style={{ marginTop: "4px" }}
 				value={title}
@@ -45,9 +56,8 @@ export const NewRoadMap = () => {
 				}}
 			/>
 			<br />
-			<label htmlFor="description_textarea">description:</label>
+			<label>description:</label>
 			<InputTextarea
-				id="description_textarea"
 				onChange={(e) => set_description(e.target.value)}
 				value={description}
 				rows={8}

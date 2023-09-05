@@ -24,3 +24,6 @@ body {
 	/* for prime react */
 	font-family: var(--font-family);
 }
+body {
+	margin: 0px;
+}

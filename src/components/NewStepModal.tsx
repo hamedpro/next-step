@@ -12,6 +12,7 @@ import { Column } from "primereact/column";
 import { Button } from "primereact/button";
 import { Panel } from "primereact/panel";
 import { InputTextarea } from "primereact/inputtextarea";
+import { useNavigate } from "react-router-dom";
 export const NewStepModal = ({
 	active,
 	roadmap,
@@ -23,6 +24,7 @@ export const NewStepModal = ({
 	roadmap_steps: cache_item<any>[];
 	onHide: () => void;
 }) => {
+	var nav = useNavigate();
 	var freeflow_context = useContext(context);
 	var current_profile_seed: profile_seed | undefined = find_active_profile_seed(
 		freeflow_context.profiles_seed
@@ -46,7 +48,7 @@ export const NewStepModal = ({
 			return;
 		}
 		//console.log(new_step);
-		await freeflow_context.request_new_thing({
+		var { meta_id, thing_id } = await freeflow_context.request_new_thing({
 			value: {
 				type: "step",
 				value: new_step,
@@ -57,6 +59,7 @@ export const NewStepModal = ({
 			thing_privileges: { read: "*", write: [-1] },
 		});
 		onHide();
+		nav(`/${thing_id}`);
 	}
 	return (
 		<Dialog
@@ -64,8 +67,8 @@ export const NewStepModal = ({
 			onHide={onHide}
 			header="New Step"
 		>
-			<div style={{ display: "flex", flexDirection: "column" }}>
-				<p style={{ marginTop: "0px" }}>Title:</p>
+			<div style={{ display: "flex", flexDirection: "column", minWidth: "300px" }}>
+				<p style={{ marginTop: "20px" }}>Title:</p>
 				<InputText
 					value={new_step.title}
 					onChange={(e) => {
@@ -85,8 +88,15 @@ export const NewStepModal = ({
 				/>
 
 				<Button
-					style={{ width: "100%", marginTop: "10px" }}
+					style={{
+						width: "100%",
+						marginTop: "10px",
+						display: "flex",
+						justifyContent: "center",
+						alignItems: "center",
+					}}
 					onClick={submit_new_step}
+					disabled={!new_step["title"]}
 				>
 					Continue Creating
 				</Button>

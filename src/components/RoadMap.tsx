@@ -12,6 +12,7 @@ import { NewStepModal } from "./NewStepModal";
 import { CustomCard } from "./CustomCard";
 import { roadmap_to_dot } from "../helpers";
 import Graphviz from "graphviz-react";
+import { CustomTitle } from "./CustomTitle";
 
 export const RoadMap = ({
 	roadmap,
@@ -57,7 +58,7 @@ export const RoadMap = ({
 	var steps = freeflow_context.cache.filter(
 		(ci) => ci.thing.type === "step" && ci.thing.value.roadmap_id === roadmap.thing_id
 	);
-	console.log(steps);
+
 	var current_profile_seed: profile_seed | undefined = find_active_profile_seed(
 		freeflow_context.profiles_seed
 	);
@@ -75,9 +76,11 @@ export const RoadMap = ({
 				active={new_step_modal.active}
 				roadmap_steps={steps}
 			/>
-			<div style={{ padding: "8px" }}>
-				<h1>RoadMap of {roadmap.thing.value.title}</h1>
-
+			<div style={{ padding: "8px", maxWidth: "768px" }}>
+				<CustomTitle
+					back_link="roadmaps"
+					text={roadmap.thing.value.title}
+				/>
 				<b style={{ margin: "20px 0px 8px 0px", display: "block" }}>Title:</b>
 				{is_admin ? (
 					<div className="p-inputgroup">
@@ -127,7 +130,7 @@ export const RoadMap = ({
 						margin: "20px 0px 8px 0px",
 					}}
 				>
-					<b style={{ display: "block" }}>Steps: </b>
+					<h3 style={{ display: "block" }}>Steps: </h3>
 					<Button
 						onClick={() => set_new_step_modal({ active: true })}
 						size="small"
@@ -140,13 +143,16 @@ export const RoadMap = ({
 						New Step
 					</Button>
 				</div>
+				<hr style={{ marginBottom: "28px" }} />
 				{steps.length === 0 ? (
 					<Message text="this roadmap has not any steps yet" />
 				) : (
-					<Graphviz
-						options={{ useWorker: false }}
-						dot={dot}
-					/>
+					<div style={{ width: "100%", overflowX: "scroll" }}>
+						<Graphviz
+							options={{ useWorker: false, innerWidth: 300 }}
+							dot={dot}
+						/>
+					</div>
 				)}
 			</div>
 		</>
