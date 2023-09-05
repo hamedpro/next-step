@@ -1,22 +1,12 @@
-import {
-	cache_item,
-	profile,
-	profile_seed,
-	thing_base,
-} from "freeflow-core/dist/UnifiedHandler_types";
+import { cache_item, profile, profile_seed } from "freeflow-core/dist/UnifiedHandler_types";
 import { context } from "freeflow-react";
 import { InputText } from "primereact/inputtext";
-import React, { useContext, useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { roadmap } from "../../types";
 import { InputTextarea } from "primereact/inputtextarea";
 import { Button } from "primereact/button";
-import { Card } from "primereact/card";
-import {
-	find_active_profile,
-	find_active_profile_seed,
-	request_new_transaction,
-} from "freeflow-core/dist/utils";
+import { find_active_profile, find_active_profile_seed } from "freeflow-core/dist/utils";
 import { Message } from "primereact/message";
 import { NewStepModal } from "./NewStepModal";
 import { CustomCard } from "./CustomCard";
@@ -67,12 +57,12 @@ export const RoadMap = ({
 	var steps = freeflow_context.cache.filter(
 		(ci) => ci.thing.type === "step" && ci.thing.value.roadmap_id === roadmap.thing_id
 	);
+	console.log(steps);
 	var current_profile_seed: profile_seed | undefined = find_active_profile_seed(
 		freeflow_context.profiles_seed
 	);
 	var is_admin = current_profile_seed !== undefined && current_profile_seed.user_id === -1;
 	var dot = roadmap_to_dot(freeflow_context.cache, roadmap);
-	console.log(dot);
 	return (
 		<>
 			<NewStepModal

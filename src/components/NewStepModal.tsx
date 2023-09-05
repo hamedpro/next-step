@@ -38,10 +38,6 @@ export const NewStepModal = ({
 		roadmap_id: roadmap.thing_id,
 	});
 
-	var [new_resource, set_new_resource] = useState<{ link: string; title: string }>({
-		link: "",
-		title: "",
-	});
 	async function submit_new_step() {
 		var current_profile: profile | undefined = find_active_profile(freeflow_context.profiles);
 
@@ -68,116 +64,32 @@ export const NewStepModal = ({
 			onHide={onHide}
 			header="New Step"
 		>
-			<div
-				style={{ display: "grid", gridTemplateColumns: "repeat(2,1fr)", columnGap: "20px" }}
-			>
-				<div>
-					<p style={{ marginTop: "0px" }}>Title:</p>
-					<InputText
-						value={new_step.title}
-						onChange={(e) => {
-							set_new_step((prev) => ({ ...prev, title: e.target.value }));
-						}}
-						style={{ width: "100%" }}
-					/>
+			<div style={{ display: "flex", flexDirection: "column" }}>
+				<p style={{ marginTop: "0px" }}>Title:</p>
+				<InputText
+					value={new_step.title}
+					onChange={(e) => {
+						set_new_step((prev) => ({ ...prev, title: e.target.value }));
+					}}
+					style={{ width: "100%" }}
+				/>
 
-					<p>Description:</p>
-					<InputTextarea
-						value={new_step.description}
-						onChange={(e) => {
-							set_new_step((prev) => ({ ...prev, description: e.target.value }));
-						}}
-						rows={5}
-						style={{ width: "100%" }}
-					/>
+				<p>Description:</p>
+				<InputTextarea
+					value={new_step.description}
+					onChange={(e) => {
+						set_new_step((prev) => ({ ...prev, description: e.target.value }));
+					}}
+					rows={5}
+					style={{ width: "100%" }}
+				/>
 
-					<p>weight:</p>
-
-					<Rating
-						value={new_step.weight}
-						onChange={(e) =>
-							set_new_step((prev) => {
-								if (typeof e.value !== "number")
-									throw "internal error. was sure e.value is a number because cancel prop is set to false";
-								return { ...prev, weight: e.value };
-							})
-						}
-						cancel={false}
-					/>
-					<p>Resources:</p>
-					<DataTable
-						value={new_step.resources}
-						tableStyle={{ width: "100%" }}
-					>
-						<Column
-							field="title"
-							header="Title"
-						/>
-						<Column
-							field="link"
-							header="Link"
-						/>
-					</DataTable>
-				</div>
-				<div>
-					<Panel header="New Resource:">
-						<p style={{ marginTop: "0px" }}>Title:</p>
-						<InputText
-							value={new_resource["title"]}
-							onChange={(e) => {
-								set_new_resource((prev) => ({ ...prev, title: e.target.value }));
-							}}
-							style={{ width: "100%" }}
-						/>
-						<p>Link:</p>
-						<InputText
-							value={new_resource["link"]}
-							onChange={(e) => {
-								set_new_resource((prev) => ({ ...prev, link: e.target.value }));
-							}}
-							style={{ width: "100%" }}
-						/>
-						<Button
-							style={{ marginTop: "10px" }}
-							onClick={() => {
-								set_new_step((prev) => ({
-									...prev,
-									resources: [...prev.resources, new_resource],
-								}));
-								set_new_resource({ title: "", link: "" });
-							}}
-						>
-							Add
-						</Button>
-					</Panel>
-					<p>Connects To:</p>
-					<MultiSelect
-						options={roadmap_steps.map((ci) => ({
-							title: ci.thing.value.title,
-							code: ci.thing_id,
-						}))}
-						value={new_step["connects_to"].map((thing_id) => ({
-							title: roadmap_steps.find((ci) => ci.thing_id === thing_id)?.thing.value
-								.title,
-							code: thing_id,
-						}))}
-						onChange={(e) =>
-							set_new_step((prev) => ({
-								...prev,
-								connects_to: e.value.map(
-									({ code, title }: { code: number; title: string }) => code
-								),
-							}))
-						}
-						optionLabel="title"
-					/>
-					<Button
-						style={{ width: "100%", marginTop: "10px" }}
-						onClick={submit_new_step}
-					>
-						Submit This New Step
-					</Button>
-				</div>
+				<Button
+					style={{ width: "100%", marginTop: "10px" }}
+					onClick={submit_new_step}
+				>
+					Continue Creating
+				</Button>
 			</div>
 		</Dialog>
 	);

@@ -1,4 +1,4 @@
-import { thing_base } from "freeflow-core/dist/UnifiedHandler_types";
+import { core_thing, thing_base } from "freeflow-core/dist/UnifiedHandler_types";
 
 export type resource = {
 	title: string;
@@ -25,4 +25,4 @@ export interface step_thing extends thing_base {
 	type: "step";
 	value: step;
 }
-var a: number | { name: string } = 22;
+export type app_thing = core_thing | roadmap_thing | step_thing;

@@ -18,7 +18,7 @@ export const RoadMaps = () => {
 						style={{ minWidth: "60px" }}
 						key={ci.thing_id}
 						onClick={() => {
-							nav(`/roadmaps/${ci.thing_id}`);
+							nav(`/${ci.thing_id}`);
 						}}
 					>
 						{ci.thing.value.title}

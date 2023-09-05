@@ -31,7 +31,7 @@ export const NewRoadMap = () => {
 			thing_privileges: { read: "*", write: [current_profile.user_id] },
 		});
 		alert(`submitted : ${JSON.stringify({ thing_id, meta_id })}`);
-		nav(`/roadmaps/${thing_id}`);
+		nav(`/${thing_id}`);
 	}
 	return (
 		<div style={{ display: "flex", flexDirection: "column", flexWrap: "wrap" }}>

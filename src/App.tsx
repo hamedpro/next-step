@@ -4,10 +4,11 @@ import "bootstrap-icons/font/bootstrap-icons.css";
 import "./tailwind_output.css";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { RoadMaps } from "./components/RoadMaps";
-import { RoadMapRoute } from "./components/RoadMapRoute";
 import { context } from "freeflow-react";
 import { useContext, useEffect } from "react";
 import { NewRoadMap } from "./components/NewRoadMap";
+import { Root } from "./Root";
+import { ThingRoute } from "./components/ThingRoute";
 function App() {
 	var freeflow_context = useContext(context);
 	useEffect(() => {
@@ -31,7 +32,7 @@ function App() {
 		<BrowserRouter>
 			<Routes>
 				<Route
-					element={<RoadMaps />}
+					element={<Root />}
 					path="/"
 				/>
 				<Route
@@ -39,8 +40,8 @@ function App() {
 					path="/roadmaps"
 				/>
 				<Route
-					element={<RoadMapRoute />}
-					path="/roadmaps/:roadmap_id/*"
+					element={<ThingRoute />}
+					path="/:thing_id"
 				/>
 
 				<Route
