@@ -23,7 +23,7 @@ export const Login = () => {
 					data: {
 						value: verf_code_or_password,
 						identifier,
-						...(checked ? { exp_duration /* seconds */: 7 * 3600 * 24 } : undefined),
+						...(checked ? { exp_days: 7 } : undefined),
 					},
 					method: "post",
 				})
@@ -57,6 +57,7 @@ export const Login = () => {
 	}
 
 	var matching_user_id = flexible_user_finder(cache, identifier);
+
 	if (matching_user_id !== undefined) {
 		var matching_user = cache.find((cache_item) => cache_item.thing_id === matching_user_id);
 	}
@@ -87,7 +88,7 @@ export const Login = () => {
 			);
 		}
 	}, [matching_user_id]);
-	var no_matching_user = identifier !== "" && matching_user === undefined;
+	var no_matching_user = identifier !== "" && matching_user_id === undefined;
 
 	return (
 		<div

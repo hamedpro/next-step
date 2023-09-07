@@ -7,7 +7,7 @@ export const LoginPage = () => {
 		<div style={{ padding: "8px" }}>
 			<CustomTitle
 				text="Login Into Your Account"
-				back_link="/"
+				back_link=""
 			/>
 			<Login />
 		</div>
