@@ -9,9 +9,11 @@ import { useContext, useEffect } from "react";
 import { NewRoadMap } from "./components/NewRoadMap";
 import { Root } from "./components/Root";
 import { ThingRoute } from "./components/ThingRoute";
+import { LoginPage } from "./components/LoginPage";
+import { RegisterPage } from "./components/RegisterPage";
 function App() {
 	var freeflow_context = useContext(context);
-	useEffect(() => {
+	/* useEffect(() => {
 		freeflow_context.set_state((prev) => ({
 			...prev,
 			profiles_seed: [
@@ -23,7 +25,7 @@ function App() {
 				},
 			],
 		}));
-	}, []);
+	}, []); */
 	/* useEffect(() => {
 		console.log(freeflow_context.profiles_seed);
 	}, [JSON.stringify(freeflow_context.profiles_seed)]); */
@@ -35,6 +37,16 @@ function App() {
 					element={<Root />}
 					path="/"
 				/>
+
+				<Route
+					element={<LoginPage />}
+					path="/login"
+				/>
+				<Route
+					element={<RegisterPage />}
+					path="/register"
+				/>
+
 				<Route
 					element={<RoadMaps />}
 					path="/roadmaps"
