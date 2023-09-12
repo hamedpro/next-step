@@ -17,8 +17,24 @@ export function roadmap_to_dot(
 			);
 		}
 	});
-	//console.log(layers.flat());
-	return jsonToDot(JSON.stringify(formatted_data));
+	var tmp = `
+	digraph G {
+		${steps
+			.map(
+				(step) =>
+					`"${step.thing_id}" [id="step-${step.thing_id}",label="${step.thing.value.title}",shape=box]`
+			)
+			.join("\n")}
+		${Object.keys(formatted_data)
+			.map((from: string) =>
+				formatted_data[from]
+					.map((to) => `"${from}" -> "${to}" [id="${from}-${to}"]`)
+					.join("\n")
+			)
+			.join("\n")}
+	}
+	`;
+	return tmp;
 }
 export const jsonToDot = (json: string) => {
 	//this function is copied from https://github.com/Risto-Stevcev/json-to-dot

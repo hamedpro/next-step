@@ -25,10 +25,7 @@ export const NewRoadMap = () => {
 		}
 		var value: roadmap = { title, description };
 		var { meta_id, thing_id } = await freeflow_context.request_new_thing({
-			value: { type: "roadmap", value },
-			unresolved_cache: freeflow_context.unresolved_cache,
-			current_profile,
-			restful_api_endpoint: freeflow_context.rest_endpoint,
+			thing: { type: "roadmap", value },
 			thing_privileges: { read: "*", write: [current_profile.user_id] },
 		});
 		alert(`submitted : ${JSON.stringify({ thing_id, meta_id })}`);
@@ -44,7 +41,7 @@ export const NewRoadMap = () => {
 			}}
 		>
 			<CustomTitle
-				back_link="roadmaps"
+				back_link="/roadmaps"
 				text="New RoadMap"
 			/>
 			<label>title:</label>

@@ -8,6 +8,7 @@
     "build": "vite build"
   },
   "dependencies": {
+    "@types/d3-graphviz": "^2.6.7",
     "@types/express": "^4.17.17",
     "@types/react": "^18.2.15",
     "@types/react-dom": "^18.2.7",
@@ -17,6 +18,7 @@
     "@vitejs/plugin-react-swc": "^3.3.2",
     "axios": "^1.5.0",
     "bootstrap-icons": "^1.10.5",
+    "d3-graphviz": "^5.1.0",
     "eslint": "^8.45.0",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.3",

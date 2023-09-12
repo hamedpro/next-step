@@ -13,7 +13,7 @@ export const RoadMaps = () => {
 	return (
 		<>
 			<CustomTitle
-				back_link=""
+				back_link="/"
 				text="RoadMaps"
 			>
 				<div

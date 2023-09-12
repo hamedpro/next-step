@@ -49,13 +49,11 @@ export const NewStepModal = ({
 		}
 		//console.log(new_step);
 		var { meta_id, thing_id } = await freeflow_context.request_new_thing({
-			value: {
+			thing: {
 				type: "step",
 				value: new_step,
 			},
-			unresolved_cache: freeflow_context.unresolved_cache,
-			restful_api_endpoint: freeflow_context.rest_endpoint,
-			current_profile,
+
 			thing_privileges: { read: "*", write: [-1] },
 		});
 		onHide();

@@ -11,7 +11,7 @@ export const RegisterPage = () => {
 		<div style={{ padding: "8px" }}>
 			<CustomTitle
 				text="RegisterPage"
-				back_link=""
+				back_link="/"
 			/>
 			<Register />
 		</div>

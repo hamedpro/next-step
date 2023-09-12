@@ -13,7 +13,7 @@ import { CustomCard } from "./CustomCard";
 import { roadmap_to_dot } from "../helpers";
 import Graphviz from "graphviz-react";
 import { CustomTitle } from "./CustomTitle";
-
+import { graphviz } from "d3-graphviz";
 export const RoadMap = ({
 	roadmap,
 }: {
@@ -46,9 +46,6 @@ export const RoadMap = ({
 					},
 				}),
 				thing_id: roadmap.thing_id,
-				restful_api_endpoint: freeflow_context.rest_endpoint,
-				jwt: current_profile.jwt,
-				unresolved_cache: freeflow_context.unresolved_cache,
 			});
 		} catch (error: any) {
 			console.log(error);
@@ -64,6 +61,19 @@ export const RoadMap = ({
 	);
 	var is_admin = current_profile_seed !== undefined && current_profile_seed.user_id === -1;
 	var dot = roadmap_to_dot(freeflow_context.cache, roadmap);
+
+	//console.log(dot);
+	useEffect(() => {
+		document.querySelectorAll(".node").forEach((element) => {
+			/* //removing all event listeners
+			var new_element = element.cloneNode(true);
+			element.parentNode?.replaceChild(new_element, element); */
+
+			element.addEventListener("click", () => {
+				nav("/" + Number(element.id.split("-")[1]));
+			});
+		});
+	}, [dot]);
 	return (
 		<>
 			<NewStepModal
@@ -78,7 +88,7 @@ export const RoadMap = ({
 			/>
 			<div style={{ padding: "8px", maxWidth: "768px" }}>
 				<CustomTitle
-					back_link="roadmaps"
+					back_link="/roadmaps"
 					text={roadmap.thing.value.title}
 				/>
 				<b style={{ margin: "20px 0px 8px 0px", display: "block" }}>Title:</b>
@@ -149,7 +159,7 @@ export const RoadMap = ({
 				) : (
 					<div style={{ width: "100%", overflowX: "scroll" }}>
 						<Graphviz
-							options={{ useWorker: false, innerWidth: 300 }}
+							options={{ useWorker: false }}
 							dot={dot}
 						/>
 					</div>

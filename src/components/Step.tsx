@@ -39,10 +39,8 @@ export const Step = ({ step }: { step: cache_item<step_thing> }) => {
 		}
 		await request_new_transaction({
 			new_thing_creator: (prev) => ({ type: "step", value: new_step }),
-			unresolved_cache,
+
 			thing_id: step.thing_id,
-			restful_api_endpoint: rest_endpoint,
-			jwt: current_profile_seed.jwt,
 		});
 	}
 	if (parent === undefined)
