@@ -38,6 +38,10 @@
   display: flex
 }
 
+.grid {
+  display: grid
+}
+
 .hidden {
   display: none
 }
@@ -110,6 +114,10 @@
 .bg-blue-100 {
   --tw-bg-opacity: 1;
   background-color: rgb(219 234 254 / var(--tw-bg-opacity))
+}
+
+.bg-transparent {
+  background-color: transparent
 }
 
 .p-3 {
@@ -220,5 +228,29 @@
   .sm\:px-8 {
     padding-left: 2rem;
     padding-right: 2rem
+  }
+}
+
+@media (min-width: 768px) {
+  .md\:block {
+    display: block
+  }
+
+  .md\:w-56 {
+    width: 14rem
+  }
+
+  .md\:w-72 {
+    width: 18rem
+  }
+
+  .md\:bg-gray-700 {
+    --tw-bg-opacity: 1;
+    background-color: rgb(55 65 81 / var(--tw-bg-opacity))
+  }
+
+  .md\:bg-gray-800 {
+    --tw-bg-opacity: 1;
+    background-color: rgb(31 41 55 / var(--tw-bg-opacity))
   }
 }

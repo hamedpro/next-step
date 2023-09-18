@@ -11,6 +11,7 @@ import { Root } from "./components/Root";
 import { ThingRoute } from "./components/ThingRoute";
 import { LoginPage } from "./components/LoginPage";
 import { RegisterPage } from "./components/RegisterPage";
+import { UserFeed } from "./components/UserFeed";
 function App() {
 	var freeflow_context = useContext(context);
 	/* useEffect(() => {
