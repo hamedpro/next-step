@@ -61,7 +61,17 @@ export const RoadMap = ({
 	);
 	var is_admin = current_profile_seed !== undefined && current_profile_seed.user_id === -1;
 	var dot = roadmap_to_dot(freeflow_context.cache, roadmap);
-
+	var active_user = freeflow_context.cache.find(
+		(ci) => ci.thing_id === current_profile_seed?.user_id
+	);
+	var active_profile_is_premium = freeflow_context.cache
+		.filter(
+			(ci) =>
+				ci.thing.type === "premium_subscription" &&
+				ci.thing.value.user_id === active_user?.thing_id
+		)
+		.map((ci) => ci.thing.value.end_timestamp)
+		.some((end_timestamp) => new Date().getTime() < end_timestamp);
 	//console.log(dot);
 	useEffect(() => {
 		document.querySelectorAll(".node").forEach((element) => {
@@ -74,6 +84,30 @@ export const RoadMap = ({
 			});
 		});
 	}, [dot]);
+	async function toggle_mark_primary_roadmap() {
+		if (active_user?.thing_id === undefined || active_user?.thing_id <= 0) {
+			alert("there's not any active profile or its a virtual user like anonymous or system.");
+			return;
+		} else if (active_profile_is_premium === false) {
+			alert(
+				"this is a premium feature. purchase a subscription or activate your free trial."
+			);
+			return;
+		}
+		await freeflow_context.request_new_transaction({
+			new_thing_creator: (prev) => ({
+				...prev,
+				value: {
+					...prev.value,
+					active_roadmap:
+						prev.value.active_roadmap === roadmap.thing_id
+							? undefined
+							: roadmap.thing_id,
+				},
+			}),
+			thing_id: active_user.thing_id,
+		});
+	}
 	return (
 		<>
 			<NewStepModal
@@ -90,7 +124,23 @@ export const RoadMap = ({
 				<CustomTitle
 					back_link="/roadmaps"
 					text={roadmap.thing.value.title}
-				/>
+				>
+					<div style={{ display: "flex", flexDirection: "row" }}>
+						{active_user?.thing_id !== undefined && active_user?.thing_id > 0 && (
+							<>
+								{active_user.thing.value.active_roadmap === roadmap.thing_id ? (
+									<Button onClick={toggle_mark_primary_roadmap}>
+										Unmark Primary Roadmap
+									</Button>
+								) : (
+									<Button onClick={toggle_mark_primary_roadmap}>
+										Mark As Primary Roadmap
+									</Button>
+								)}
+							</>
+						)}
+					</div>
+				</CustomTitle>
 				<b style={{ margin: "20px 0px 8px 0px", display: "block" }}>Title:</b>
 				{is_admin ? (
 					<div className="p-inputgroup">

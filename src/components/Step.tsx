@@ -1,5 +1,5 @@
 import { cache_item, core_thing, profile_seed } from "freeflow-core/dist/UnifiedHandler_types";
-import { step_thing } from "../../types";
+import { resource, step_thing } from "../../types";
 import { context } from "freeflow-react";
 import { MultiSelect } from "primereact/multiselect";
 import { useContext, useEffect, useState } from "react";
@@ -53,6 +53,22 @@ export const Step = ({ step }: { step: cache_item<step_thing> }) => {
 	);
 	var is_admin = current_profile_seed !== undefined && current_profile_seed.user_id === -1;
 	var change_mode = is_admin && use_admin_mode;
+	async function toggle_premium_only(link: string) {
+		//console.log(step.thing.value.resources, "looking for", link);
+		if (new_step.resources.filter((res) => res.link === link).length !== 1) {
+			alert(
+				"it was expected to just have one item with link = link of the resource you have clicked on but it was not that way."
+			);
+			return;
+		}
+		set_new_step((prev) => {
+			var clone = JSON.parse(JSON.stringify(prev));
+			var res = clone.resources.find((res: resource) => res.link === link);
+			if (res === undefined) throw "could not find that resource you want to edit";
+			res.premium_only = !Boolean(res.premium_only);
+			return clone;
+		});
+	}
 	return (
 		<div style={{ padding: "12px" }}>
 			<div style={{ display: "flex", justifyContent: "space-between" }}>
@@ -164,6 +180,19 @@ export const Step = ({ step }: { step: cache_item<step_thing> }) => {
 				<Column
 					field="link"
 					header="Link"
+				/>
+				<Column
+					field="premium_only"
+					header="premium resource"
+					body={(resource) => {
+						return (
+							<ToggleButton
+								disabled={change_mode === false}
+								checked={!!resource.premium_only}
+								onChange={() => toggle_premium_only(resource.link)}
+							/>
+						);
+					}}
 				/>
 			</DataTable>
 			{change_mode && (

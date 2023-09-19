@@ -12,6 +12,8 @@ import { ThingRoute } from "./components/ThingRoute";
 import { LoginPage } from "./components/LoginPage";
 import { RegisterPage } from "./components/RegisterPage";
 import { UserFeed } from "./components/UserFeed";
+import { FakePG } from "./components/FakePG";
+import { FreeTrial } from "./components/FreeTrial";
 function App() {
 	var freeflow_context = useContext(context);
 	/* useEffect(() => {
@@ -60,6 +62,14 @@ function App() {
 				<Route
 					element={<NewRoadMap />}
 					path="/roadmaps/new"
+				/>
+				<Route
+					element={<FakePG />}
+					path="/payment-gateway"
+				/>
+				<Route
+					element={<FreeTrial />}
+					path="/free-trial"
 				/>
 			</Routes>
 		</BrowserRouter>
