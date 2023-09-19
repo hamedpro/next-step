@@ -18,6 +18,7 @@ export const Step = ({ step }: { step: cache_item<step_thing> }) => {
 	var [use_admin_mode, set_use_admin_mode] = useState(false);
 	var { cache, request_new_transaction, unresolved_cache, rest_endpoint, profiles_seed } =
 		useContext(context);
+
 	var [new_step, set_new_step] = useState<step>(step.thing.value);
 	useEffect(() => {
 		set_new_step(step.thing.value);
@@ -69,6 +70,15 @@ export const Step = ({ step }: { step: cache_item<step_thing> }) => {
 			return clone;
 		});
 	}
+	var active_user = cache.find((ci) => ci.thing_id === current_profile_seed?.user_id);
+	var active_profile_is_premium = cache
+		.filter(
+			(ci) =>
+				ci.thing.type === "premium_subscription" &&
+				ci.thing.value.user_id === active_user?.thing_id
+		)
+		.map((ci) => ci.thing.value.end_timestamp)
+		.some((end_timestamp) => new Date().getTime() < end_timestamp);
 	return (
 		<div style={{ padding: "12px" }}>
 			<div style={{ display: "flex", justifyContent: "space-between" }}>
@@ -176,10 +186,20 @@ export const Step = ({ step }: { step: cache_item<step_thing> }) => {
 				<Column
 					field="title"
 					header="Title"
+					body={(resource) =>
+						is_admin === false && active_profile_is_premium === false
+							? "Hidden Resource"
+							: resource.title
+					}
 				/>
 				<Column
 					field="link"
 					header="Link"
+					body={(resource) =>
+						is_admin === false && active_profile_is_premium === false
+							? "Hidden Resource"
+							: resource.link
+					}
 				/>
 				<Column
 					field="premium_only"

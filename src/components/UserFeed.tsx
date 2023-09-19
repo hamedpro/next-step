@@ -5,7 +5,7 @@ import { Button } from "primereact/button";
 import { Link, useNavigate } from "react-router-dom";
 import { context } from "freeflow-react";
 import { find_active_profile_seed } from "freeflow-core/dist/utils";
-
+import { shuffle } from "../helpers";
 export const UserFeed = () => {
 	var { cache, profiles_seed } = useContext(context);
 	var nav = useNavigate();
@@ -27,48 +27,81 @@ export const UserFeed = () => {
 	return (
 		<>
 			<TopBar />
-			<div style={{ padding: "8px" }}>
+			<div style={{ padding: "12px" }}>
 				<h1>User Feed</h1>
 				{active_profile_is_premium ? (
 					<p>You have an active premium plan.</p>
 				) : (
 					<Panel header="Upgrade">
-						<div style={{ display: "flex", flexDirection: "row" }}>
-							<div style={{ display: "flex", flexDirection: "column", width: "50%" }}>
-								<h1>
+						<div
+							style={{ display: "flex", columnGap: "20px" }}
+							className="flex-col sm:flex-row"
+						>
+							<div
+								style={{ display: "flex" }}
+								className="w-full flex-col sm:w-1/2"
+							>
+								<h1 style={{ margin: "0px" }}>
 									<i className="bi bi-rocket-takeoff" /> Upgrade To Premium
 								</h1>
 								<p>
-									Lorem ipsum dolor sit amet consectetur adipisicing elit. Commodi
-									doloremque natus, ipsa provident odio sit incidunt reiciendis
-									mollitia quasi similique voluptatibus praesentium rerum fuga
-									itaque? Laboriosam impedit temporibus nihil repudiandae?
+									You can show your support and enjoy our premium features by
+									upgrading your account. you can also make your decision after
+									your 2 week free trial.
 								</p>
 							</div>
-							<div style={{ display: "flex", flexDirection: "column" }}>
+							<div
+								style={{ display: "flex" }}
+								className="w-full flex-col sm:w-1/2"
+							>
+								<h3 style={{ margin: "0p" }}>Premium Features</h3>
 								<ul>
-									<li>2x Speed</li>
 									<li>Access To Premium Resources</li>
-									<li>Track Your Progress.</li>
-									<li>Find A Partner.</li>
+									<li>
+										choose a primary roadmap and mark your progress. you can
+										export a resume of your exact skills anytime you want.
+									</li>
+									<li>Access to Laboratories and polish your skills.</li>
+									<li>
+										Find A Work Partner and help each other grow. sometimes you
+										need someone to push you out of laziness{" "}
+									</li>
 								</ul>
-								<Button onClick={() => nav(`/payment-gateway`)}>Go Premium</Button>
+								<Button
+									onClick={() => nav(`/payment-gateway`)}
+									style={{ width: "100%" }}
+								>
+									Go Premium
+								</Button>
 							</div>
 						</div>
 					</Panel>
 				)}
+				<br />
 				{previous_subscriptions.length === 0 && (
-					<Panel header="Free Trial">
-						<p>You meet the requirements to get a free trial. just click here.</p>
-						<Button onClick={() => nav("/free-trial")}>Activate Trial</Button>
-					</Panel>
+					<>
+						<Panel header="Free Trial">
+							<h1 style={{ margin: "0px" }}>
+								<i className="bi bi-rocket-takeoff" /> 2 Week Free Trial
+							</h1>
+							<p>
+								You meet the requirements to get a free trial. just by a single
+								click.
+							</p>
+							<Button onClick={() => nav("/free-trial")}>Activate Trial</Button>
+						</Panel>
+						<br />
+					</>
 				)}
+
 				<Panel header="Your Active Roadmap">
+					<h1 style={{ margin: "0px" }}>
+						<i className="bi bi-signpost-2" /> Your Active Roadmap
+					</h1>
 					{active_profile_is_premium ? (
 						active_user?.thing.value.active_roadmap ? (
 							<>
 								<p>
-									Your Active Roadmap:{" "}
 									{
 										cache.find(
 											(ci) =>
@@ -99,18 +132,21 @@ export const UserFeed = () => {
 					)}
 				</Panel>
 				<br />
-				<Panel header="Other Roadmaps">
-					{cache
-						.filter((ci) => ci.thing.type === "roadmap")
-						.slice(0, 5)
-						.map((ci) => (
-							<Button
-								key={JSON.stringify(ci)}
-								onClick={() => nav(`/${ci.thing_id}`)}
-							>
-								{ci.thing.value.title}
-							</Button>
-						))}
+				<Panel header="Some Random Roadmaps">
+					<div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
+						{shuffle(cache.filter((ci) => ci.thing.type === "roadmap"))
+							.slice(0, 5)
+							.map((ci) => (
+								<Button
+									key={JSON.stringify(ci)}
+									onClick={() => nav(`/${ci.thing_id}`)}
+								>
+									{ci.thing.value.title}
+								</Button>
+							))}
+					</div>
+
+					<br />
 					<Link to={`/roadmaps`}>
 						See all {cache.filter((ci) => ci.thing.type === "roadmap").length} Roadmaps
 					</Link>

@@ -16,22 +16,25 @@ import { FakePG } from "./components/FakePG";
 import { FreeTrial } from "./components/FreeTrial";
 function App() {
 	var freeflow_context = useContext(context);
-	/* useEffect(() => {
+	useEffect(() => {
 		freeflow_context.set_state((prev) => ({
 			...prev,
 			profiles_seed: [
-				{ user_id: 0, max_depth: undefined, is_active: false, jwt: undefined },
-				{
-					user_id: -1,
-					jwt: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjotMSwiZXhwIjoxNjk0Mjc2MzkxLCJpYXQiOjE2OTM2NzE1OTB9.zpH0ONCZb47fZd7jXwGlYZ7KeswQ7vGqvc11Is28oH0",
-					is_active: true,
-				},
+				//here
+				...prev.profiles_seed
+					.filter((ps) => ps.user_id !== 0)
+					.map((ps) => ({ ...ps, is_active: false })),
+				{ user_id: 0, max_depth: undefined, is_active: true, jwt: undefined },
 			],
 		}));
-	}, []); */
+	}, []);
 	/* useEffect(() => {
-		console.log(freeflow_context.profiles_seed);
-	}, [JSON.stringify(freeflow_context.profiles_seed)]); */
+		console.log(freeflow_context.cache);
+	}, [freeflow_context.cache]);
+	*/
+	useEffect(() => {
+		console.log(freeflow_context.profiles);
+	}, [JSON.stringify(freeflow_context.profiles)]);
 
 	return (
 		<BrowserRouter>
