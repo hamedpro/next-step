@@ -7,6 +7,7 @@ import { context } from "freeflow-react";
 import { find_active_profile_seed } from "freeflow-core/dist/utils";
 import { Dialog } from "primereact/dialog";
 import { useNavigate } from "react-router-dom";
+import { Panel } from "primereact/panel";
 
 export const FakePG = () => {
 	var nav = useNavigate();
@@ -46,28 +47,30 @@ export const FakePG = () => {
 					<Button onClick={() => nav("/")}>Get Back To Feed</Button>
 				</div>
 			</Dialog>
-
-			<CustomTitle
-				back_link="/"
-				text="Payment Gateway"
-			/>
-			<div
-				style={{
-					display: "flex",
-					flexDirection: "column",
-					justifyContent: "center",
-					alignItems: "center",
-				}}
-			>
-				<h1>Congratulation!</h1>
-				<p>
-					we're in Beta phase and we dont have an active Payment Gateway yet. your
-					Subscription will be activated with no cost! enjoy your premium Subscription and
-					report if you ever found a bug.
-				</p>
-				<Button onClick={submit_new_subscription}>
-					Go Premium <i className="bi bi-rocket-takeoff" />{" "}
-				</Button>
+			<div style={{ padding: "12px" }}>
+				<CustomTitle
+					back_link="/"
+					text="Payment Gateway"
+				/>
+				<>
+					<Panel header="Payment Gateway">
+						<h1 style={{ margin: "0px" }}>
+							<i className="bi bi-cake2" /> Congratulation!
+						</h1>
+						<p>
+							we're in Beta phase and we dont have an active Payment Gateway yet. your
+							Subscription will be activated with no cost! enjoy your premium
+							Subscription and report if you ever found a bug.
+						</p>
+						<Button
+							onClick={submit_new_subscription}
+							icon={"bi bi-rocket-takeoff pr-2"}
+						>
+							Go Premium
+						</Button>
+					</Panel>
+					<br />
+				</>
 			</div>
 		</>
 	);

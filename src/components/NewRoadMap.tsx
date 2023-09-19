@@ -38,6 +38,7 @@ export const NewRoadMap = () => {
 				flexDirection: "column",
 				flexWrap: "wrap",
 				maxWidth: "500px",
+				padding: "12px",
 			}}
 		>
 			<CustomTitle
@@ -46,7 +47,7 @@ export const NewRoadMap = () => {
 			/>
 			<label>title:</label>
 			<InputText
-				style={{ marginTop: "4px" }}
+				style={{ marginTop: "8px" }}
 				value={title}
 				onChange={(e) => {
 					set_title(e.target.value);
@@ -58,7 +59,7 @@ export const NewRoadMap = () => {
 				onChange={(e) => set_description(e.target.value)}
 				value={description}
 				rows={8}
-				style={{ marginTop: "4px" }}
+				style={{ marginTop: "8px" }}
 			/>
 
 			<Button

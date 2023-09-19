@@ -5,6 +5,7 @@ import React, { useContext, useState } from "react";
 import { SearchModal } from "./SearchModal";
 import { useNavigate } from "react-router-dom";
 import { SideBar } from "./SideBar";
+import { InputText } from "primereact/inputtext";
 
 export const TopBar = () => {
 	var { profiles_seed, cache, rest_endpoint } = useContext(context);
@@ -35,10 +36,10 @@ export const TopBar = () => {
 					justifyContent: "space-between",
 				}}
 			>
-				<i
+				<Button
+					icon={"bi bi-list"}
 					onClick={() => set_sidebar(true)}
-					className="bi bi-list"
-					style={{ fontSize: "50px" }}
+					style={{ width: "45px", height: "45px" }}
 				/>
 
 				<div
@@ -50,29 +51,44 @@ export const TopBar = () => {
 					}}
 				>
 					<div
+						className="p-inputgroup sm:flex hidden"
 						onClick={() => {
 							set_seach_modal(true);
 						}}
-						className="md:bg-gray-800 md:w-72"
-						style={{
-							display: "flex",
-							alignItems: "center",
-							padding: "10px",
-							columnGap: "20px",
-						}}
+						style={{ height: "45px" }}
 					>
-						<i
-							className="bi bi-search"
-							style={{ fontSize: "40px" }}
+						<InputText
+							placeholder="Search Everywhere..."
+							className="w-72"
 						/>
-						<h3 className="hidden md:block">Type Something...</h3>
+						<Button
+							icon="bi bi-search"
+							className="p-button-success"
+						/>
 					</div>
-
+					<Button
+						style={{ height: "45px" }}
+						onClick={() => {
+							set_seach_modal(true);
+						}}
+						icon="bi bi-search"
+						className="p-button-success sm:hidden"
+					/>
 					{(active_user_id || 0) === 0 ? (
-						<Button onClick={() => nav(`/login`)}>Login</Button>
+						<Button
+							onClick={() => nav(`/login`)}
+							style={{
+								height: "45px",
+								display: "flex",
+								justifyContent: "center",
+								alignItems: "center",
+							}}
+						>
+							Login
+						</Button>
 					) : active_user?.thing.value.profile_image_file_id ? (
 						<img
-							style={{ width: "50px", height: "50px" }}
+							style={{ width: "45px", height: "45px" }}
 							src={calc_file_url(
 								profiles_seed,
 								rest_endpoint,
@@ -86,7 +102,7 @@ export const TopBar = () => {
 									`your active profile is system profile. its a virtual profile.`
 								)
 							}
-							style={{ fontSize: "50px" }}
+							style={{ fontSize: "45px" }}
 							className={`bi bi-person-gear`}
 						/>
 					) : (
@@ -94,7 +110,7 @@ export const TopBar = () => {
 							onClick={() => {
 								nav(`/${active_user_id}`);
 							}}
-							style={{ fontSize: "50px" }}
+							style={{ fontSize: "45px" }}
 							className={`bi bi-person-fill`}
 						/>
 					)}

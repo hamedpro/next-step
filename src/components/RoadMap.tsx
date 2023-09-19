@@ -110,17 +110,18 @@ export const RoadMap = ({
 	}
 	return (
 		<>
-			<NewStepModal
-				onHide={() => {
-					set_new_step_modal({
-						active: false,
-					});
-				}}
-				roadmap={roadmap}
-				active={new_step_modal.active}
-				roadmap_steps={steps}
-			/>
-			<div style={{ padding: "8px", maxWidth: "768px" }}>
+			<div style={{ padding: "12px", maxWidth: "768px" }}>
+				<NewStepModal
+					onHide={() => {
+						set_new_step_modal({
+							active: false,
+						});
+					}}
+					roadmap={roadmap}
+					active={new_step_modal.active}
+					roadmap_steps={steps}
+				/>
+
 				<CustomTitle
 					back_link="/roadmaps"
 					text={roadmap.thing.value.title}

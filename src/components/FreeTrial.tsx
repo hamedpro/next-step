@@ -28,7 +28,7 @@ export const FreeTrial = () => {
 				value: {
 					user_id: active_profile_seed.user_id,
 					start_timestamp: new Date().getTime(),
-					end_timestamp: new Date().getTime() + 31 * 24 * 3600 * 1000,
+					end_timestamp: new Date().getTime() + 14 * 24 * 3600 * 1000,
 				},
 			},
 		});
@@ -36,26 +36,31 @@ export const FreeTrial = () => {
 		nav("/");
 	}
 	return (
-		<>
+		<div style={{ padding: "12px" }}>
 			<CustomTitle
 				back_link="/"
 				text="Free Trial"
 			/>
 			{previous_subscriptions.length === 0 ? (
 				<>
-					<h1>Congratulations!</h1>
-					<p>
-						You can activate your free trial just by a single click. feel free to try
-						our platform and tell us about any possible bugs. Free Trials last 2 weeks.
-					</p>
-					<Button onClick={start_free_trial}>Start Trial</Button>
+					<Panel header="Free Trial">
+						<h1 style={{ margin: "0px" }}>
+							<i className="bi bi-rocket-takeoff" /> 2 Week Free Trial
+						</h1>
+						<p>
+							You meet the requirements to get a free trial. upgrade just by a single
+							click.
+						</p>
+						<Button onClick={start_free_trial}>Activate Trial</Button>
+					</Panel>
+					<br />
 				</>
 			) : (
 				<p>
-					You have {previous_subscriptions.length} subscriptions in the past. Free Trial
-					is for beginners.
+					You don't meet the requirements of activating a free trial. you have logged into
+					a virtual profile or you have a previous premium subscription.
 				</p>
 			)}
-		</>
+		</div>
 	);
 };

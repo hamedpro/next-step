@@ -16,7 +16,7 @@ export const SearchModal = ({ visible, onHide }: { visible: boolean; onHide: () 
 			visible={visible}
 			position="top"
 			onHide={onHide}
-			style={{ height: "75vh" }}
+			style={{ height: "75vh", borderRadius: "0px 0px 10px 10px" }}
 		>
 			<div
 				style={{

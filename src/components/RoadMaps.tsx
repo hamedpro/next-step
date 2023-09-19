@@ -11,7 +11,7 @@ export const RoadMaps = () => {
 	var roadmaps: cache_item<any>[] = cache.filter((ci) => ci.thing.type === "roadmap");
 	var nav = useNavigate();
 	return (
-		<>
+		<div style={{ padding: "12px" }}>
 			<CustomTitle
 				back_link="/"
 				text="RoadMaps"
@@ -42,6 +42,6 @@ export const RoadMaps = () => {
 					</Button>
 				))}
 			</div>
-		</>
+		</div>
 	);
 };
