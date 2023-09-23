@@ -10,7 +10,7 @@ import { find_active_profile, find_active_profile_seed } from "freeflow-core/dis
 import { Message } from "primereact/message";
 import { NewStepModal } from "./NewStepModal";
 import { CustomCard } from "./CustomCard";
-import { roadmap_to_dot } from "../helpers";
+import { active_profile_seed_is_premium, roadmap_to_dot } from "../helpers";
 import Graphviz from "graphviz-react";
 import { CustomTitle } from "./CustomTitle";
 import { graphviz } from "d3-graphviz";
@@ -64,14 +64,10 @@ export const RoadMap = ({
 	var active_user = freeflow_context.cache.find(
 		(ci) => ci.thing_id === current_profile_seed?.user_id
 	);
-	var active_profile_is_premium = freeflow_context.cache
-		.filter(
-			(ci) =>
-				ci.thing.type === "premium_subscription" &&
-				ci.thing.value.user_id === active_user?.thing_id
-		)
-		.map((ci) => ci.thing.value.end_timestamp)
-		.some((end_timestamp) => new Date().getTime() < end_timestamp);
+	var active_profile_is_premium = active_profile_seed_is_premium(
+		freeflow_context.cache,
+		freeflow_context.profiles_seed
+	);
 	//console.log(dot);
 	useEffect(() => {
 		document.querySelectorAll(".node").forEach((element) => {

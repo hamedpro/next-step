@@ -5,20 +5,13 @@ import { Button } from "primereact/button";
 import { Link, useNavigate } from "react-router-dom";
 import { context } from "freeflow-react";
 import { find_active_profile_seed } from "freeflow-core/dist/utils";
-import { shuffle } from "../helpers";
+import { active_profile_seed_is_premium, shuffle } from "../helpers";
 import { PremiumUpgradeBanner } from "./PremiumUpgradeBanner";
 export const UserFeed = () => {
 	var { cache, profiles_seed } = useContext(context);
 	var nav = useNavigate();
 	var active_profile_seed = find_active_profile_seed(profiles_seed);
-	var active_profile_is_premium = cache
-		.filter(
-			(ci) =>
-				ci.thing.type === "premium_subscription" &&
-				ci.thing.value.user_id === active_profile_seed?.user_id
-		)
-		.map((ci) => ci.thing.value.end_timestamp)
-		.some((end_timestamp) => new Date().getTime() < end_timestamp);
+	var active_profile_is_premium = active_profile_seed_is_premium(cache, profiles_seed);
 	var previous_subscriptions = cache.filter(
 		(ci) =>
 			ci.thing.type === "premium_subscription" &&

@@ -4,19 +4,14 @@ import { Button } from "primereact/button";
 import { Panel } from "primereact/panel";
 import React, { useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import { active_profile_seed_is_premium } from "../helpers";
 
 export const PremiumUpgradeBanner = () => {
 	var { cache, profiles_seed } = useContext(context);
 	var nav = useNavigate();
 	var active_profile_seed = find_active_profile_seed(profiles_seed);
-	var active_profile_is_premium = cache
-		.filter(
-			(ci) =>
-				ci.thing.type === "premium_subscription" &&
-				ci.thing.value.user_id === active_profile_seed?.user_id
-		)
-		.map((ci) => ci.thing.value.end_timestamp)
-		.some((end_timestamp) => new Date().getTime() < end_timestamp);
+	var active_profile_is_premium = active_profile_seed_is_premium(cache, profiles_seed);
+
 	return active_profile_is_premium ? (
 		<p>You have an active premium plan.</p>
 	) : (

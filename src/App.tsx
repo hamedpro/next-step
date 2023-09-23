@@ -14,27 +14,14 @@ import { RegisterPage } from "./components/RegisterPage";
 import { UserFeed } from "./components/UserFeed";
 import { FakePG } from "./components/FakePG";
 import { FreeTrial } from "./components/FreeTrial";
+import { StepLabs } from "./components/StepLabs";
 function App() {
 	var freeflow_context = useContext(context);
-	useEffect(() => {
-		freeflow_context.set_state((prev) => ({
-			...prev,
-			profiles_seed: [
-				//here
-				...prev.profiles_seed
-					.filter((ps) => ps.user_id !== 0)
-					.map((ps) => ({ ...ps, is_active: false })),
-				{ user_id: 0, max_depth: undefined, is_active: true, jwt: undefined },
-			],
-		}));
-	}, []);
+
 	/* useEffect(() => {
 		console.log(freeflow_context.cache);
 	}, [freeflow_context.cache]);
 	*/
-	useEffect(() => {
-		console.log(freeflow_context.profiles);
-	}, [JSON.stringify(freeflow_context.profiles)]);
 
 	return (
 		<BrowserRouter>
@@ -73,6 +60,10 @@ function App() {
 				<Route
 					element={<FreeTrial />}
 					path="/free-trial"
+				/>
+				<Route
+					element={<StepLabs />}
+					path="/:thing_id/labs"
 				/>
 			</Routes>
 		</BrowserRouter>

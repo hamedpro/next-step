@@ -14,10 +14,13 @@ import { find_active_profile_seed } from "freeflow-core/dist/utils";
 import { InputTextarea } from "primereact/inputtextarea";
 import { CustomTitle } from "./CustomTitle";
 import { CustomCard } from "./CustomCard";
+import { StepLabs } from "./StepLabs";
+import { active_profile_seed_is_premium } from "../helpers";
+import { useNavigate } from "react-router-dom";
 export const Step = ({ step }: { step: cache_item<step_thing> }) => {
+	var nav = useNavigate();
 	var [use_admin_mode, set_use_admin_mode] = useState(false);
-	var { cache, request_new_transaction, unresolved_cache, rest_endpoint, profiles_seed } =
-		useContext(context);
+	var { cache, request_new_transaction, profiles_seed } = useContext(context);
 
 	var [new_step, set_new_step] = useState<step>(step.thing.value);
 	useEffect(() => {
@@ -71,14 +74,8 @@ export const Step = ({ step }: { step: cache_item<step_thing> }) => {
 		});
 	}
 	var active_user = cache.find((ci) => ci.thing_id === current_profile_seed?.user_id);
-	var active_profile_is_premium = cache
-		.filter(
-			(ci) =>
-				ci.thing.type === "premium_subscription" &&
-				ci.thing.value.user_id === active_user?.thing_id
-		)
-		.map((ci) => ci.thing.value.end_timestamp)
-		.some((end_timestamp) => new Date().getTime() < end_timestamp);
+	var active_profile_is_premium = active_profile_seed_is_premium(cache, profiles_seed);
+
 	return (
 		<div style={{ padding: "12px" }}>
 			<div style={{ display: "flex", justifyContent: "space-between" }}>
@@ -296,6 +293,8 @@ export const Step = ({ step }: { step: cache_item<step_thing> }) => {
 					</Button>
 				))
 			)}
+			<hr style={{ margin: "28px 0px " }} />
+			<Button onClick={() => nav(`/${step.thing_id}/labs`)}>Open Its Laboratories</Button>
 		</div>
 	);
 };
