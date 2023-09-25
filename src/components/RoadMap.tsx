@@ -160,7 +160,7 @@ export const RoadMap = ({
 				<b style={{ margin: "20px 0px 8px 0px", display: "block" }}>Description: </b>
 				{is_admin ? (
 					<InputTextarea
-						rows={5}
+						rows={10}
 						style={{ width: "100%" }}
 						value={description_input}
 						onChange={(e) => {

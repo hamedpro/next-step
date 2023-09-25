@@ -13,8 +13,14 @@ import { find_active_profile_seed } from "freeflow-core/dist/utils";
 import { DataTable } from "primereact/datatable";
 
 export const Lab = ({ lab }: { lab: cache_item<lab_thing> }) => {
-	var { cache, profiles_seed, request_new_transaction, configured_axios, download_a_file } =
-		useContext(context);
+	var {
+		cache,
+		profiles_seed,
+		request_new_transaction,
+		configured_axios,
+		download_a_file,
+		download_tar_archive,
+	} = useContext(context);
 
 	var premium_account = active_profile_seed_is_premium(cache, profiles_seed);
 	var [new_lab, set_new_lab] = useState(lab.thing.value);
@@ -51,6 +57,7 @@ export const Lab = ({ lab }: { lab: cache_item<lab_thing> }) => {
 		set_new_lab((prev) => ({ ...prev, file_ids: prev.file_ids.concat(new_file_id) }));
 		e.options.clear();
 	}
+
 	return (
 		<div
 			style={{
@@ -88,7 +95,7 @@ export const Lab = ({ lab }: { lab: cache_item<lab_thing> }) => {
 					<Button
 						onClick={apply_changes}
 						disabled={JSON.stringify(lab.thing.value) === JSON.stringify(new_lab)}
-						icon="bi bi-floppy2-fill"
+						icon="bi bi-floppy2-fill pr-2"
 					>
 						<span className="hidden sm:inline-block">Apply Changes</span>
 					</Button>
@@ -149,12 +156,25 @@ export const Lab = ({ lab }: { lab: cache_item<lab_thing> }) => {
 					}}
 				>
 					<h4>Uploaded Files:</h4>
-					<div className="card flex justify-content-center">
-						<FileUpload
-							mode="basic"
-							uploadHandler={uploadHandler}
-							customUpload
-						/>
+					<div style={{ display: "flex", alignItems: "center", columnGap: "10px" }}>
+						<Button
+							icon="bi bi-cloud-download pr-2"
+							onClick={() =>
+								download_tar_archive(
+									lab.thing.value.file_ids,
+									`step-${lab.thing.value.title}.tar`
+								)
+							}
+						>
+							Tar Archive
+						</Button>
+						<div className="card flex justify-content-center">
+							<FileUpload
+								mode="basic"
+								uploadHandler={uploadHandler}
+								customUpload
+							/>
+						</div>
 					</div>
 				</div>
 				<hr style={{ backgroundColor: "gray", width: "100%" }} />
