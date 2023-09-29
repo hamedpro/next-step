@@ -17,6 +17,7 @@ import { CustomCard } from "./CustomCard";
 import { StepLabs } from "./StepLabs";
 import { active_profile_seed_is_premium } from "../helpers";
 import { useNavigate } from "react-router-dom";
+import { AssetsSection } from "./AssetsSection";
 export const Step = ({ step }: { step: cache_item<step_thing> }) => {
 	var nav = useNavigate();
 	var [use_admin_mode, set_use_admin_mode] = useState(false);
@@ -57,22 +58,7 @@ export const Step = ({ step }: { step: cache_item<step_thing> }) => {
 	);
 	var is_admin = current_profile_seed !== undefined && current_profile_seed.user_id === -1;
 	var change_mode = is_admin && use_admin_mode;
-	async function toggle_premium_only(link: string) {
-		//console.log(step.thing.value.resources, "looking for", link);
-		if (new_step.resources.filter((res) => res.link === link).length !== 1) {
-			alert(
-				"it was expected to just have one item with link = link of the resource you have clicked on but it was not that way."
-			);
-			return;
-		}
-		set_new_step((prev) => {
-			var clone = JSON.parse(JSON.stringify(prev));
-			var res = clone.resources.find((res: resource) => res.link === link);
-			if (res === undefined) throw "could not find that resource you want to edit";
-			res.premium_only = !Boolean(res.premium_only);
-			return clone;
-		});
-	}
+
 	var active_user = cache.find((ci) => ci.thing_id === current_profile_seed?.user_id);
 	var active_profile_is_premium = active_profile_seed_is_premium(cache, profiles_seed);
 
@@ -175,92 +161,23 @@ export const Step = ({ step }: { step: cache_item<step_thing> }) => {
 				cancel={false}
 			/>
 			<hr />
-			<p>Resources:</p>
-			<DataTable
-				value={new_step.resources}
-				tableStyle={{ width: "100%", borderRadius: "4px", overflow: "hidden" }}
-			>
-				<Column
-					field="title"
-					header="Title"
-					body={(resource) =>
-						is_admin === false && active_profile_is_premium === false
-							? "Hidden Resource"
-							: resource.title
-					}
-				/>
-				<Column
-					field="link"
-					header="Link"
-					body={(resource) =>
-						is_admin === false && active_profile_is_premium === false
-							? "Hidden Resource"
-							: resource.link
-					}
-				/>
-				<Column
-					field="premium_only"
-					header="premium resource"
-					body={(resource) => {
-						return (
-							<ToggleButton
-								disabled={change_mode === false}
-								checked={!!resource.premium_only}
-								onChange={() => toggle_premium_only(resource.link)}
-							/>
-						);
-					}}
-				/>
-			</DataTable>
-			{change_mode && (
-				<>
-					<p style={{ margin: "15px 0px 10px 0px " }}>Add New Resources:</p>
-					<div
-						style={{
-							alignItems: "center",
-							gap: "10px",
-							marginBottom: "28px",
-							width: "100%",
-						}}
-						className="flex flex-col sm:flex-row"
-					>
-						<InputText
-							className="w-full"
-							value={new_resource["title"]}
-							placeholder="Enter a title"
-							onChange={(e) => {
-								set_new_resource((prev) => ({ ...prev, title: e.target.value }));
-							}}
-						/>
-
-						<InputText
-							className="grow w-full"
-							value={new_resource["link"]}
-							placeholder="Enter a link"
-							onChange={(e) => {
-								set_new_resource((prev) => ({ ...prev, link: e.target.value }));
-							}}
-						/>
-						<Button
-							className="w-full"
-							style={{
-								display: "flex",
-								justifyContent: "center",
-								alignItems: "center",
-							}}
-							onClick={() => {
-								set_new_step((prev) => ({
-									...prev,
-									resources: [...prev.resources, new_resource],
-								}));
-								set_new_resource({ title: "", link: "" });
-							}}
-						>
-							Add
-						</Button>
-					</div>
-				</>
-			)}
+			<AssetsSection
+				change_mode={change_mode}
+				tar_archive_name={"assets" + step.thing.value.title + ".tar"}
+				file_ids={new_step.assets || []}
+				onUpload={(new_file_id) =>
+					set_new_step((prev) => ({
+						...prev,
+						assets: (prev.assets || []).concat(new_file_id),
+					}))
+				}
+				onDelete={(file_id) =>
+					set_new_step((prev) => ({
+						...prev,
+						assets: (prev.assets || []).filter((ass) => ass !== file_id),
+					}))
+				}
+			/>
 
 			<hr style={{ margin: "28px 0px " }} />
 			<p style={{ marginTop: "24px" }}>Next Steps: </p>

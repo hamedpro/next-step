@@ -14,7 +14,7 @@ export type step = {
 	title: string;
 	description: string;
 	weight: number;
-	resources: resource[];
+	assets?: number[]; // file_ids
 	lab: lab;
 	connects_to: number[];
 	roadmap_id: number;
