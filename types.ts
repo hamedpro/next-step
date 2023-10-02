@@ -34,3 +34,8 @@ export interface lab_thing extends thing_base {
 	value: lab;
 }
 export type app_thing = core_thing | roadmap_thing | step_thing;
+export type roadmap_collection = { title: string; roadmaps: { id: number }[]; description: string };
+export interface roadmap_collection_thing extends thing_base {
+	type: "roadmap_collection";
+	value: roadmap_collection;
+}

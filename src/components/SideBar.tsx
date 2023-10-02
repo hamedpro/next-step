@@ -29,6 +29,11 @@ export const SideBar = ({ visible, onHide }: { visible: boolean; onHide: () => v
 				text="New Roadmap"
 				url="/roadmaps/new"
 			/>
+			<CustomLink
+				icon={<i className="bi-collection" />}
+				text="New Roadmap Collection"
+				url="/roadmap_collections/new"
+			/>
 		</Sidebar>
 	);
 };

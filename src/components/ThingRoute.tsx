@@ -1,10 +1,11 @@
 import { useContext } from "react";
 import { context } from "freeflow-react";
 import { useParams } from "react-router-dom";
-import { cache_item } from "freeflow-core/dist/UnifiedHandler_types";
+import { cache, cache_item } from "freeflow-core/dist/UnifiedHandler_types";
 import { RoadMap } from "./RoadMap";
-import { app_thing, roadmap_thing, step_thing } from "../../types";
+import { app_thing, roadmap_collection_thing, roadmap_thing, step_thing } from "../../types";
 import { Step } from "./Step";
+import { RoadmapCollection } from "./RoadmapCollection";
 export const ThingRoute = () => {
 	var { cache } = useContext(context);
 
@@ -20,6 +21,12 @@ export const ThingRoute = () => {
 			return <RoadMap roadmap={cache_item as cache_item<roadmap_thing>} />;
 		} else if (cache_item.thing.type === "step") {
 			return <Step step={cache_item as cache_item<step_thing>} />;
+		} else if (cache_item.thing.type === "roadmap_collection") {
+			return (
+				<RoadmapCollection
+					roadmap_collection={cache_item as cache_item<roadmap_collection_thing>}
+				/>
+			);
 		}
 	}
 };

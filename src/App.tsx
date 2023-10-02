@@ -12,6 +12,8 @@ import { ThingRoute } from "./components/ThingRoute";
 import { LoginPage } from "./components/LoginPage";
 import { RegisterPage } from "./components/RegisterPage";
 import { StepLabs } from "./components/StepLabs";
+import { NewRoadmapCollection } from "./components/NewRoadmapCollection";
+import { RoadmapCollections } from "./components/RoadmapCollections";
 function App() {
 	/* var freeflow_context = useContext(context);
 
@@ -53,6 +55,14 @@ function App() {
 				<Route
 					element={<StepLabs />}
 					path="/:thing_id/labs"
+				/>
+				<Route
+					element={<NewRoadmapCollection />}
+					path="/roadmap_collections/new"
+				/>
+				<Route
+					element={<RoadmapCollections />}
+					path="/roadmap_collections"
 				/>
 			</Routes>
 		</BrowserRouter>
