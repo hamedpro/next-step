@@ -1,16 +1,11 @@
 import { cache_item, profile, profile_seed } from "freeflow-core/dist/UnifiedHandler_types";
 import { find_active_profile, find_active_profile_seed } from "freeflow-core/dist/utils";
 import { context } from "freeflow-react";
-import { MultiSelect } from "primereact/multiselect";
 import { Dialog } from "primereact/dialog";
-import React, { Dispatch, SetStateAction, useContext, useState } from "react";
+import { useContext, useState } from "react";
 import { roadmap_thing, step } from "../../types";
-import { Rating } from "primereact/rating";
 import { InputText } from "primereact/inputtext";
-import { DataTable } from "primereact/datatable";
-import { Column } from "primereact/column";
 import { Button } from "primereact/button";
-import { Panel } from "primereact/panel";
 import { InputTextarea } from "primereact/inputtextarea";
 import { useNavigate } from "react-router-dom";
 export const NewStepModal = ({
@@ -26,16 +21,12 @@ export const NewStepModal = ({
 }) => {
 	var nav = useNavigate();
 	var freeflow_context = useContext(context);
-	var current_profile_seed: profile_seed | undefined = find_active_profile_seed(
-		freeflow_context.profiles_seed
-	);
 
 	var [new_step, set_new_step] = useState<step>({
 		title: "",
 		description: "",
 		weight: 1,
-		resources: [],
-		laboratory: null,
+		assets: [],
 		connects_to: [],
 		roadmap_id: roadmap.thing_id,
 	});

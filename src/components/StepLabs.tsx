@@ -1,13 +1,9 @@
-import React, { Dispatch, Fragment, SetStateAction, useContext } from "react";
-import { lab_thing, step, step_thing } from "../../types";
+import { useContext } from "react";
+import { lab_thing } from "../../types";
 import { context } from "freeflow-react";
-import ReactMarkdown from "react-markdown";
 import { Button } from "primereact/button";
-import { InputText } from "primereact/inputtext";
 import { useParams } from "react-router-dom";
-import { active_profile_seed_is_premium } from "../helpers";
 import { find_active_profile_seed } from "freeflow-core/dist/utils";
-import { CustomLink } from "./CustomLink";
 import { CustomTitle } from "./CustomTitle";
 import { Lab } from "./Lab";
 import { cache_item } from "freeflow-core/dist/UnifiedHandler_types";
@@ -31,19 +27,10 @@ export const StepLabs = () => {
 					file_ids: [],
 				},
 			},
+			thing_privileges: { read: "*", write: [-1] },
 		});
 	}
-	var active_profile_is_premium = active_profile_seed_is_premium(cache, profiles_seed);
-	if (active_profile_is_premium === false) {
-		return (
-			<div>
-				<h1>
-					Laboratories are only accessible if you're a premium subscriber. activate your
-					free trial if you haven't used it yet.
-				</h1>
-			</div>
-		);
-	}
+
 	return (
 		<div style={{ padding: "12px" }}>
 			<div

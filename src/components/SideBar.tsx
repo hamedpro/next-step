@@ -1,6 +1,4 @@
-import React from "react";
 import { Sidebar } from "primereact/sidebar";
-import { Link } from "react-router-dom";
 import { CustomLink } from "./CustomLink";
 export const SideBar = ({ visible, onHide }: { visible: boolean; onHide: () => void }) => {
 	return (
@@ -30,17 +28,6 @@ export const SideBar = ({ visible, onHide }: { visible: boolean; onHide: () => v
 				icon={<i className="bi-sign-turn-slight-right" />}
 				text="New Roadmap"
 				url="/roadmaps/new"
-			/>
-
-			<CustomLink
-				icon={<i className="bi-cash-stack" />}
-				text="Free Trial"
-				url="/free-trial"
-			/>
-			<CustomLink
-				icon={<i className="bi-rocket-takeoff" />}
-				text="Upgrade To Premium"
-				url="/payment-gateway"
 			/>
 		</Sidebar>
 	);

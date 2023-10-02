@@ -66,10 +66,6 @@
   width: 100%
 }
 
-.grow {
-  flex-grow: 1
-}
-
 .cursor-pointer {
   cursor: pointer
 }
@@ -227,14 +223,6 @@
 
   .sm\:hidden {
     display: none
-  }
-
-  .sm\:w-1\/2 {
-    width: 50%
-  }
-
-  .sm\:flex-row {
-    flex-direction: row
   }
 
   .sm\:px-8 {

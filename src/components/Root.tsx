@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef } from "react";
+import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { CustomLink } from "./CustomLink";
 import { context } from "freeflow-react";

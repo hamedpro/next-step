@@ -1,4 +1,4 @@
-import React, { Fragment, useContext, useState } from "react";
+import { Fragment, useContext, useState } from "react";
 import { Sidebar } from "primereact/sidebar";
 import { InputText } from "primereact/inputtext";
 import { context } from "freeflow-react";

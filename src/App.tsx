@@ -11,17 +11,13 @@ import { Root } from "./components/Root";
 import { ThingRoute } from "./components/ThingRoute";
 import { LoginPage } from "./components/LoginPage";
 import { RegisterPage } from "./components/RegisterPage";
-import { UserFeed } from "./components/UserFeed";
-import { FakePG } from "./components/FakePG";
-import { FreeTrial } from "./components/FreeTrial";
 import { StepLabs } from "./components/StepLabs";
 function App() {
-	var freeflow_context = useContext(context);
+	/* var freeflow_context = useContext(context);
 
-	/* useEffect(() => {
+	useEffect(() => {
 		console.log(freeflow_context.cache);
-	}, [freeflow_context.cache]);
-	*/
+	}, [freeflow_context.cache]); */
 
 	return (
 		<BrowserRouter>
@@ -53,14 +49,7 @@ function App() {
 					element={<NewRoadMap />}
 					path="/roadmaps/new"
 				/>
-				<Route
-					element={<FakePG />}
-					path="/payment-gateway"
-				/>
-				<Route
-					element={<FreeTrial />}
-					path="/free-trial"
-				/>
+
 				<Route
 					element={<StepLabs />}
 					path="/:thing_id/labs"

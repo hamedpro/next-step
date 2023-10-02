@@ -1,12 +1,11 @@
 import { useContext } from "react";
 import { context } from "freeflow-react";
-import { Route, Routes, useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { cache_item } from "freeflow-core/dist/UnifiedHandler_types";
 import { RoadMap } from "./RoadMap";
-import { app_thing, roadmap_thing, step, step_thing } from "../../types";
+import { app_thing, roadmap_thing, step_thing } from "../../types";
 import { Step } from "./Step";
 export const ThingRoute = () => {
-	var nav = useNavigate();
 	var { cache } = useContext(context);
 
 	var { thing_id } = useParams();

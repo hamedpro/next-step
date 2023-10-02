@@ -71,18 +71,3 @@ export function shuffle(array: any[]) {
 
 	return array;
 }
-export function active_profile_seed_is_premium(cache: cache, profiles_seed: profile_seed[]) {
-	var current_profile_seed = find_active_profile_seed(profiles_seed);
-	var active_profile_is_premium = cache
-		.filter(
-			(ci) =>
-				ci.thing.type === "premium_subscription" &&
-				ci.thing.value.user_id === current_profile_seed?.user_id
-		)
-		.map((ci) => ci.thing.value.end_timestamp)
-		.some((end_timestamp) => new Date().getTime() < end_timestamp);
-	return (
-		active_profile_is_premium ||
-		(current_profile_seed !== undefined && current_profile_seed.user_id === -1)
-	);
-}

@@ -3,17 +3,12 @@ import { validate } from "json-schema";
 import { InputTextarea } from "primereact/inputtextarea";
 import { InputText } from "primereact/inputtext";
 import { TabMenu } from "primereact/tabmenu";
-import React, { useContext, useRef, useState } from "react";
+import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { context } from "freeflow-react";
 import { roadmap } from "../../types";
-import {
-	find_active_profile,
-	request_new_thing,
-	request_new_transaction,
-} from "freeflow-core/dist/utils";
+import { find_active_profile } from "freeflow-core/dist/utils";
 import { profile } from "freeflow-core/dist/UnifiedHandler_types";
-import { Toast } from "primereact/toast";
 import { CustomTitle } from "./CustomTitle";
 import ReactMarkdown from "react-markdown";
 export const NewRoadMap = () => {

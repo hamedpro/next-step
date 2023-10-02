@@ -1,33 +1,22 @@
 import { cache_item } from "freeflow-core/dist/UnifiedHandler_types";
-import React, { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { lab_thing } from "../../types";
 import ReactMarkdown from "react-markdown";
-import { active_profile_seed_is_premium } from "../helpers";
 import { context } from "freeflow-react";
 import { InputText } from "primereact/inputtext";
 import { ToggleButton } from "primereact/togglebutton";
 import { InputTextarea } from "primereact/inputtextarea";
 import { Button } from "primereact/button";
-import { FileUpload, FileUploadHandlerEvent } from "primereact/fileupload";
 import { find_active_profile_seed } from "freeflow-core/dist/utils";
-import { DataTable } from "primereact/datatable";
 import { AssetsSection } from "./AssetsSection";
 
 export const Lab = ({ lab }: { lab: cache_item<lab_thing> }) => {
-	var {
-		cache,
-		profiles_seed,
-		request_new_transaction,
-		configured_axios,
-		download_a_file,
-		download_tar_archive,
-	} = useContext(context);
+	var { profiles_seed, request_new_transaction } = useContext(context);
 
-	var premium_account = active_profile_seed_is_premium(cache, profiles_seed);
 	var [new_lab, set_new_lab] = useState(lab.thing.value);
 	var active_prof_seed = find_active_profile_seed(profiles_seed);
 	useEffect(() => {
-		set_new_lab((prev) => lab.thing.value);
+		set_new_lab(() => lab.thing.value);
 	}, [JSON.stringify(lab.thing.value)]);
 
 	var [markdown_edit_mode, set_markdown_edit_mode] = useState(false);

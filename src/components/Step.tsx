@@ -1,21 +1,17 @@
 import { cache_item, core_thing, profile_seed } from "freeflow-core/dist/UnifiedHandler_types";
-import { resource, step_thing } from "../../types";
+import { step_thing } from "../../types";
 import { context } from "freeflow-react";
 import { MultiSelect } from "primereact/multiselect";
 import { useContext, useEffect, useState } from "react";
 import { step } from "../../types";
 import { Rating } from "primereact/rating";
 import { InputText } from "primereact/inputtext";
-import { DataTable } from "primereact/datatable";
-import { Column } from "primereact/column";
 import { Button } from "primereact/button";
 import { ToggleButton } from "primereact/togglebutton";
 import { find_active_profile_seed } from "freeflow-core/dist/utils";
 import { InputTextarea } from "primereact/inputtextarea";
 import { CustomTitle } from "./CustomTitle";
 import { CustomCard } from "./CustomCard";
-import { StepLabs } from "./StepLabs";
-import { active_profile_seed_is_premium } from "../helpers";
 import { useNavigate } from "react-router-dom";
 import { AssetsSection } from "./AssetsSection";
 export const Step = ({ step }: { step: cache_item<step_thing> }) => {
@@ -32,10 +28,6 @@ export const Step = ({ step }: { step: cache_item<step_thing> }) => {
 		(ci) => ci.thing_id === step.thing.value.roadmap_id
 	);
 
-	var [new_resource, set_new_resource] = useState<{ link: string; title: string }>({
-		link: "",
-		title: "",
-	});
 	var current_profile_seed: profile_seed | undefined = find_active_profile_seed(profiles_seed);
 	async function save_changes() {
 		if (current_profile_seed === undefined) {
@@ -59,8 +51,7 @@ export const Step = ({ step }: { step: cache_item<step_thing> }) => {
 	var is_admin = current_profile_seed !== undefined && current_profile_seed.user_id === -1;
 	var change_mode = is_admin && use_admin_mode;
 
-	var active_user = cache.find((ci) => ci.thing_id === current_profile_seed?.user_id);
-	var active_profile_is_premium = active_profile_seed_is_premium(cache, profiles_seed);
+	//var active_user = cache.find((ci) => ci.thing_id === current_profile_seed?.user_id);
 
 	return (
 		<div style={{ padding: "12px" }}>

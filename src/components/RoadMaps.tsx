@@ -1,8 +1,6 @@
 import { cache_item } from "freeflow-core/dist/UnifiedHandler_types";
 import { context } from "freeflow-react";
-import { Panel } from "primereact/panel";
 import { useContext } from "react";
-import { roadmap_thing } from "../../types";
 import { Button } from "primereact/button";
 import { useNavigate } from "react-router-dom";
 import { CustomTitle } from "./CustomTitle";
