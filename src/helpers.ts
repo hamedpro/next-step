@@ -1,21 +1,7 @@
-import { find_active_profile_seed } from "freeflow-core/dist/utils";
-import { roadmap, roadmap_thing, step_thing } from "../types";
-import { step } from "../types";
-import {
-	cache,
-	cache_item,
-	core_thing,
-	profile_seed,
-} from "freeflow-core/dist/UnifiedHandler_types";
-
-export function roadmap_to_dot(
-	cache: cache_item<core_thing | step_thing>[],
-	roadmap_ci: cache_item<roadmap_thing>
-): string {
+import { roadmap_thing, step_thing } from "../types";
+import { cache_item, core_thing } from "freeflow-core/dist/UnifiedHandler_types";
+export function steps_to_dot(steps: cache_item<step_thing>[]) {
 	var formatted_data: { [key: string]: string[] } = {};
-	var steps = cache.filter(
-		(ci) => ci.thing.type === "step" && ci.thing.value.roadmap_id === roadmap_ci.thing_id
-	);
 	steps.forEach((step) => {
 		if ("prerequisites" in step.thing.value && step.thing.value.prerequisites !== undefined) {
 			(step.thing.value.prerequisites as Array<number>).forEach((prereq) => {
@@ -53,10 +39,9 @@ export function roadmap_to_dot(
 		overlap=false;
 		nodesep="0.2";
 		ranksep="0.4";
-		label="Attack Tree for S3 Bucket with Video Recordings";
 		labelloc="t";
 		fontname="Lato";
-		node [ shape="plaintext" style="filled, rounded" fontname="Lato" margin=0.2 ];
+		node [ shape="plaintext" style="filled, rounded" fontname="Lato" margin=0.2 width=5];
 		edge [ fontname="Lato" color="#2B303A" ];
 		node [ color="#ED96AC" ];
 		nodesep=1.5;
@@ -69,6 +54,15 @@ export function roadmap_to_dot(
 	}
 	`;
 	return tmp;
+}
+export function roadmap_to_dot(
+	cache: cache_item<core_thing | step_thing>[],
+	roadmap_ci: cache_item<roadmap_thing>
+): string {
+	var steps = cache.filter(
+		(ci) => ci.thing.type === "step" && ci.thing.value.roadmap_id === roadmap_ci.thing_id
+	);
+	return steps_to_dot(steps as cache_item<step_thing>[]);
 }
 export function shuffle(array: any[]) {
 	let currentIndex = array.length,
