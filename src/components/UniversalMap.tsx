@@ -1,17 +1,19 @@
 import Graphviz from "graphviz-react";
-import React, { ReactNode, useContext, useMemo } from "react";
+import { ReactNode, useContext, useMemo, useState } from "react";
 import { steps_to_dot } from "../helpers";
 import { context } from "freeflow-react";
 import { cache_item } from "freeflow-core/dist/UnifiedHandler_types";
-import { step_thing } from "../../types";
-
+import { roadmap_collection_thing, step_thing } from "../../types";
+import { find_active_profile_seed } from "freeflow-core/dist/utils";
+import { SelectButton } from "primereact/selectbutton";
+import { useWindowSize } from "@uidotdev/usehooks";
 export const UniversalMap = ({ children }: { children: ReactNode }) => {
-	var { cache } = useContext(context);
-	var steps = cache.filter((ci) => ci.thing.type === "step");
-	var dot = useMemo(
-		() => steps_to_dot(steps as cache_item<step_thing>[]),
-		[JSON.stringify(steps)]
-	);
+	var { cache, profiles_seed } = useContext(context);
+	var active_profile_seed = find_active_profile_seed(profiles_seed);
+	var active_user = cache.find((ci) => ci.thing_id === active_profile_seed?.user_id);
+
+	var steps = cache.filter((ci) => ci.thing.type === "step") as cache_item<step_thing>[];
+
 	var template = `
     # http://www.graphviz.org/content/cluster
   
@@ -208,7 +210,32 @@ export const UniversalMap = ({ children }: { children: ReactNode }) => {
         // based on the level of attack difficulty
         attack_6 -> attack_9 -> attack_13 -> attack_14 [ style="invis" ]
     }`;
+	var [view_mode, set_view_mode] = useState<"all" | "active_roadmap" | "active_collection">(
+		"all"
+	);
+	var active_roadmap_id: undefined | number = active_user?.thing.value.active_roadmap;
+	var active_roadmap_collection_id: undefined | number =
+		active_user?.thing.value.active_roadmap_collection;
 
+	var steps_to_show = steps;
+	if (view_mode === "active_roadmap") {
+		steps_to_show = steps.filter((step) => step.thing.value.roadmap_id === active_roadmap_id);
+	} else if (view_mode === "active_collection") {
+		var current_roadmap_collection = cache.find(
+			(ci) => ci.thing_id === active_roadmap_collection_id
+		) as cache_item<roadmap_collection_thing> | undefined;
+		var roadmaps_of_this_collection =
+			current_roadmap_collection?.thing.value.roadmaps.map((roadmap) => roadmap.id) || [];
+		steps_to_show = steps.filter((step) =>
+			roadmaps_of_this_collection.includes(step.thing.value.roadmap_id)
+		);
+	}
+
+	var dot = useMemo(
+		() => steps_to_dot(steps_to_show as cache_item<step_thing>[]),
+		[JSON.stringify(steps_to_show)]
+	);
+	var { width, height } = useWindowSize();
 	return (
 		<div
 			style={{
@@ -242,10 +269,28 @@ export const UniversalMap = ({ children }: { children: ReactNode }) => {
 				options={{
 					useWorker: false,
 					zoom: true,
-					height: window.innerHeight,
-					width: window.innerWidth,
+					height: height || window.innerHeight,
+					width: width || window.innerWidth,
 				}}
 			/>
+			<div
+				style={{
+					position: "absolute",
+					right: "8px",
+					bottom: "8px",
+
+					display: "flex",
+					flexDirection: "column",
+					rowGap: "8px",
+					padding: "8px",
+				}}
+			>
+				<SelectButton
+					options={["all", "active_roadmap", "active_collection"]}
+					value={view_mode}
+					onChange={(e) => set_view_mode(e.value)}
+				/>
+			</div>
 		</div>
 	);
 };
