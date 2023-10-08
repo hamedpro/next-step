@@ -23,38 +23,50 @@ export function roadmap_to_dot(
 			);
 		}
 	});
+	var nodes = shuffle(
+		steps.map(
+			(step) =>
+				`"${step.thing_id}" [id="step-${step.thing_id}",label="${step.thing.value.title}",shape=box]`
+		)
+	);
+
+	var nodes_part_1 = [];
+	var nodes_part_2 = [];
+	for (var i = 0; i < nodes.length; i++) {
+		if (Math.random() < 0.5) {
+			nodes_part_1.push(nodes[i]);
+		} else {
+			nodes_part_2.push(nodes[i]);
+		}
+	}
+	var edges = Object.keys(formatted_data).map((from: string) =>
+		formatted_data[from].map((to) => `"${from}" -> "${to}" [id="${from}-${to}"]`).join("\n")
+	);
+
 	var tmp = `
 	digraph G {
-		${steps
-			.map(
-				(step) =>
-					`"${step.thing_id}" [id="step-${step.thing_id}",label="${step.thing.value.title}",shape=box]`
-			)
-			.join("\n")}
-		${Object.keys(formatted_data)
-			.map((from: string) =>
-				formatted_data[from]
-					.map((to) => `"${from}" -> "${to}" [id="${from}-${to}"]`)
-					.join("\n")
-			)
-			.join("\n")}
+		rankdir="TB";
+		splines=true;
+		overlap=false;
+		nodesep="0.2";
+		ranksep="0.4";
+		label="Attack Tree for S3 Bucket with Video Recordings";
+		labelloc="t";
+		fontname="Lato";
+		node [ shape="plaintext" style="filled, rounded" fontname="Lato" margin=0.2 ];
+		edge [ fontname="Lato" color="#2B303A" ];
+		node [ color="#ED96AC" ];
+		nodesep=1.5;
+		${nodes_part_1.join("\n")}
+		node [ color="#ABD2FA" ]
+		nodesep=1.5;
+		${nodes_part_2.join("\n")}
+		node [ color="#ABD2FA" ];
+		${edges.join("\n")}
 	}
 	`;
 	return tmp;
 }
-export const jsonToDot = (json: string) => {
-	//this function is copied from https://github.com/Risto-Stevcev/json-to-dot
-	//the repo was licensed under MIT
-	var parsed: { [key: string]: string[] } = JSON.parse(json);
-	return (
-		Object.entries(parsed).reduce((acc, [node, dependencies]) => {
-			return dependencies.reduce(
-				(acc, dependency) => acc + `  "${node}" -> "${dependency}"\n`,
-				acc
-			);
-		}, "digraph G {\n") + "}"
-	);
-};
 export function shuffle(array: any[]) {
 	let currentIndex = array.length,
 		randomIndex;
