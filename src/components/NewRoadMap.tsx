@@ -36,8 +36,7 @@ export const NewRoadMap = () => {
 		if (mode === "bootstrap_mode") {
 			var steps = JSON.parse(bootstrap_json);
 			var last_submitted_step_id: number | undefined = undefined;
-			for (var i = steps.length - 1; i >= 0; i--) {
-				//iterating backward to have step id of next step
+			for (var i = 0; i < steps.length; i++) {
 				var step = steps[i];
 				last_submitted_step_id = (
 					await freeflow_context.request_new_thing({
@@ -46,7 +45,7 @@ export const NewRoadMap = () => {
 							value: {
 								title: step.title,
 								description: step.description,
-								connects_to:
+								prerequisites:
 									last_submitted_step_id === undefined
 										? []
 										: [last_submitted_step_id],

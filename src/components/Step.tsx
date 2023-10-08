@@ -171,14 +171,14 @@ export const Step = ({ step }: { step: cache_item<step_thing> }) => {
 			/>
 
 			<hr style={{ margin: "28px 0px " }} />
-			<p style={{ marginTop: "24px" }}>Next Steps: </p>
+			<p style={{ marginTop: "24px" }}>Prerequisites </p>
 			{change_mode === true ? (
 				<MultiSelect
 					options={roadmap_steps.map((ci) => ({
 						title: ci.thing.value.title,
 						code: ci.thing_id,
 					}))}
-					value={new_step["connects_to"].map((thing_id) => ({
+					value={new_step["prerequisites"].map((thing_id) => ({
 						title: roadmap_steps.find((ci) => ci.thing_id === thing_id)?.thing.value
 							.title,
 						code: thing_id,
@@ -186,7 +186,7 @@ export const Step = ({ step }: { step: cache_item<step_thing> }) => {
 					onChange={(e) =>
 						set_new_step((prev) => ({
 							...prev,
-							connects_to: e.value.map(
+							prerequisites: e.value.map(
 								({ code, title }: { code: number; title: string }) => code
 							),
 						}))
@@ -195,8 +195,11 @@ export const Step = ({ step }: { step: cache_item<step_thing> }) => {
 					style={{ color: "black" }}
 				/>
 			) : (
-				new_step["connects_to"].map((thing_id) => (
-					<Button key={thing_id}>
+				new_step["prerequisites"].map((thing_id) => (
+					<Button
+						key={thing_id}
+						onClick={() => nav(`/${thing_id}`)}
+					>
 						{roadmap_steps.find((ci) => ci.thing_id === thing_id)?.thing.value.title}
 					</Button>
 				))

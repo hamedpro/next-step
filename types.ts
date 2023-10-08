@@ -14,7 +14,7 @@ export type step = {
 	description: string;
 	weight: number;
 	assets?: number[]; // file_ids
-	connects_to: number[];
+	prerequisites: number[];
 	roadmap_id: number;
 };
 export type roadmap = {

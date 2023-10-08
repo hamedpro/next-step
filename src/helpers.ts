@@ -17,10 +17,13 @@ export function roadmap_to_dot(
 		(ci) => ci.thing.type === "step" && ci.thing.value.roadmap_id === roadmap_ci.thing_id
 	);
 	steps.forEach((step) => {
-		if ("connects_to" in step.thing.value && step.thing.value.connects_to !== undefined) {
-			formatted_data[step.thing_id.toString()] = step.thing.value.connects_to.map(
-				(id: number) => id.toString()
-			);
+		if ("prerequisites" in step.thing.value && step.thing.value.prerequisites !== undefined) {
+			(step.thing.value.prerequisites as Array<number>).forEach((prereq) => {
+				if (formatted_data[prereq] === undefined) {
+					formatted_data[prereq] = [];
+				}
+				formatted_data[prereq].push(step.thing_id.toString());
+			});
 		}
 	});
 	var nodes = shuffle(
@@ -61,7 +64,7 @@ export function roadmap_to_dot(
 		node [ color="#ABD2FA" ]
 		nodesep=1.5;
 		${nodes_part_2.join("\n")}
-		node [ color="#ABD2FA" ];
+		
 		${edges.join("\n")}
 	}
 	`;

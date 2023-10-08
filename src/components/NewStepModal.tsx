@@ -27,7 +27,7 @@ export const NewStepModal = ({
 		description: "",
 		weight: 1,
 		assets: [],
-		connects_to: [],
+		prerequisites: [],
 		roadmap_id: roadmap.thing_id,
 	});
 
