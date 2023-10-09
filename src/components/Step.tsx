@@ -1,4 +1,9 @@
-import { cache_item, core_thing, profile_seed } from "freeflow-core/dist/UnifiedHandler_types";
+import {
+	cache_item,
+	core_thing,
+	profile_seed,
+	user,
+} from "freeflow-core/dist/UnifiedHandler_types";
 import { step_thing } from "../../types";
 import { context } from "freeflow-react";
 import { MultiSelect } from "primereact/multiselect";
@@ -14,6 +19,7 @@ import { CustomTitle } from "./CustomTitle";
 import { CustomCard } from "./CustomCard";
 import { useNavigate } from "react-router-dom";
 import { AssetsSection } from "./AssetsSection";
+import { CustomPanel } from "./CustomPanel";
 export const Step = ({ step }: { step: cache_item<step_thing> }) => {
 	var nav = useNavigate();
 	var [use_admin_mode, set_use_admin_mode] = useState(false);
@@ -23,7 +29,6 @@ export const Step = ({ step }: { step: cache_item<step_thing> }) => {
 	useEffect(() => {
 		set_new_step(step.thing.value);
 	}, [JSON.stringify(step.thing.value)]);
-	useEffect(() => {}, []);
 	var parent: cache_item<core_thing> | undefined = cache.find(
 		(ci) => ci.thing_id === step.thing.value.roadmap_id
 	);
@@ -51,8 +56,33 @@ export const Step = ({ step }: { step: cache_item<step_thing> }) => {
 	var is_admin = current_profile_seed !== undefined && current_profile_seed.user_id === -1;
 	var change_mode = is_admin && use_admin_mode;
 
-	//var active_user = cache.find((ci) => ci.thing_id === current_profile_seed?.user_id);
+	var active_user = cache.find((ci) => ci.thing_id === current_profile_seed?.user_id);
+	var done_steps: number[] = active_user?.thing.value.done_steps || [];
+	async function toggle_done_mark() {
+		var user_id = current_profile_seed?.user_id;
+		if (user_id === undefined || user_id <= 0) {
+			alert("There is not any profile seed active or a virtual profile seed is active.");
+			return;
+		}
+		await request_new_transaction({
+			new_thing_creator: (prev) => {
+				console.log(prev.value.done_steps);
+				if (prev.value.done_steps === undefined) {
+					prev.value.done_steps = [];
+				}
+				if (prev.value.done_steps.includes(step.thing_id)) {
+					prev.value.done_steps = prev.value.done_steps.filter(
+						(step_id: number) => step_id !== step.thing_id
+					);
+				} else {
+					prev.value.done_steps.push(step.thing_id);
+				}
 
+				return prev;
+			},
+			thing_id: user_id,
+		});
+	}
 	return (
 		<div style={{ padding: "12px" }}>
 			<div style={{ display: "flex", justifyContent: "space-between" }}>
@@ -151,6 +181,37 @@ export const Step = ({ step }: { step: cache_item<step_thing> }) => {
 				}
 				cancel={false}
 			/>
+			<hr />
+			<CustomPanel
+				bootstrap_icon="bi-list-check"
+				panel_title="Progress Tracker"
+				icon_title="Track Your Progress Visually"
+			>
+				<div
+					style={{
+						display: "flex",
+						flexDirection: "column",
+						rowGap: "12px",
+					}}
+				>
+					<p>
+						Mark steps you have done so we can show you your progress drawn as charts
+						and heatmaps. you will not miss where you left anymore!
+					</p>
+					<b>
+						{done_steps.includes(step.thing_id)
+							? `You have done this step before`
+							: `You haven't marked this step as done`}
+					</b>
+					<ToggleButton
+						onChange={toggle_done_mark}
+						style={{ width: "fit-content" }}
+						checked={done_steps.includes(step.thing_id)}
+						offIcon={"Mark As Done"}
+						onLabel="Mark As Unread"
+					/>
+				</div>
+			</CustomPanel>
 			<hr />
 			<AssetsSection
 				change_mode={change_mode}

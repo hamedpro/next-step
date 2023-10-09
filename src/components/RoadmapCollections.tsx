@@ -44,8 +44,9 @@ export const RoadmapCollections = () => {
 			>
 				{roadmap_collections.map((coll) => (
 					<CustomPanel
+						key={coll.thing_id}
 						panel_title={`roadmap #${coll.thing_id}`}
-						icon="bi-signpost-2"
+						bootstrap_icon="bi-signpost-2"
 						icon_title={coll.thing.value.title}
 					>
 						<div
