@@ -174,7 +174,9 @@ export const Step = ({ step }: { step: cache_item<step_thing> }) => {
 			<p style={{ marginTop: "24px" }}>Prerequisites </p>
 			{change_mode === true ? (
 				<MultiSelect
-					options={roadmap_steps.map((ci) => ({
+					options={(
+						cache.filter((ci) => ci.thing.type === "step") as cache_item<step_thing>[]
+					).map((ci) => ({
 						title: ci.thing.value.title,
 						code: ci.thing_id,
 					}))}
