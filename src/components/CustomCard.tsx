@@ -1,6 +1,6 @@
 import React from "react";
 import { Card } from "primereact/card";
-export const CustomCard = ({ children }: { children: React.ReactNode }) => {
+export const CustomCard = ({ children }: { children?: React.ReactNode }) => {
 	return (
 		<Card
 			style={{ padding: "0px" }}

@@ -35,7 +35,7 @@ export const NewRoadmapCollection = () => {
 	return (
 		<div style={{ padding: "8px", display: "flex", flexDirection: "column", rowGap: "15px" }}>
 			<CustomTitle
-				back_link="/"
+				back_link="/roadmap_collections"
 				text="New Roadmap Collection"
 			/>
 			<label>Title:</label>
