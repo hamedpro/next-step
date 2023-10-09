@@ -1,4 +1,4 @@
-import { cache, cache_item, profile, profile_seed } from "freeflow-core/dist/UnifiedHandler_types";
+import { cache_item, profile, profile_seed } from "freeflow-core/dist/UnifiedHandler_types";
 import { context } from "freeflow-react";
 import { InputText } from "primereact/inputtext";
 import { useContext, useEffect, useMemo, useState } from "react";
@@ -10,7 +10,7 @@ import { find_active_profile, find_active_profile_seed } from "freeflow-core/dis
 import { Message } from "primereact/message";
 import { NewStepModal } from "./NewStepModal";
 import { CustomCard } from "./CustomCard";
-import { roadmap_to_dot, steps_to_dot } from "../helpers";
+import { steps_to_dot } from "../helpers";
 import Graphviz from "graphviz-react";
 import { CustomTitle } from "./CustomTitle";
 export const RoadMap = ({
