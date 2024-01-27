@@ -1,20 +1,24 @@
 import { useContext } from "react";
-import { TopBar } from "./TopBar";
+//import { TopBar } from "./TopBar";
 import { Panel } from "primereact/panel";
 import { Button } from "primereact/button";
 import { Link, useNavigate } from "react-router-dom";
-import { context } from "freeflow-react";
-import { find_active_profile_seed } from "freeflow-core/dist/utils";
 import { shuffle } from "../helpers";
+import { ServerSyncContext } from "react_stream/dist/ServerSyncContext";
+import { roadmap, user } from "../types";
 export const UserFeed = () => {
-	var { cache, profiles_seed } = useContext(context);
+	var { data, parsed_virtual_localstorage } = useContext(ServerSyncContext);
 	var nav = useNavigate();
-	var active_profile_seed = find_active_profile_seed(profiles_seed);
+	var active_user = data.users.find(
+		(u: user) => u.username === parsed_virtual_localstorage.active_username
+	) as user;
+	if (!active_user) {
+		return "active user not found";
+	}
 
-	var active_user = cache.find((ci) => ci.thing_id === active_profile_seed?.user_id);
 	return (
 		<>
-			<TopBar />
+			{/* <TopBar /> */}
 			<div style={{ padding: "12px" }}>
 				<h1>User Feed</h1>
 				<br />
@@ -23,25 +27,23 @@ export const UserFeed = () => {
 					<h1 style={{ margin: "0px" }}>
 						<i className="bi bi-signpost-2" /> Your Active Roadmap
 					</h1>
-					{active_user?.thing.value.active_roadmap ? (
+					{active_user.active_roadmap ? (
 						<>
 							<p>
 								{
-									cache.find(
-										(ci) =>
-											ci.thing_id === active_user?.thing.value.active_roadmap
-									)?.thing.value.title
+									data.roadmaps.find(
+										(roadmap: roadmap) =>
+											roadmap.id === active_user.active_roadmap
+									)?.title
 								}
 							</p>
-							<Button
-								onClick={() => nav(`/${active_user?.thing.value.active_roadmap}`)}
-							>
+							<Button onClick={() => nav(`/${active_user.active_roadmap}`)}>
 								Jump In
 							</Button>
 						</>
 					) : (
 						<p>
-							You have not an active roadmap. mark a roadmap as your current in
+							you dont have an active roadmap. mark a roadmap as your current in
 							progress roadmap and that will be shown here
 						</p>
 					)}
@@ -49,22 +51,20 @@ export const UserFeed = () => {
 				<br />
 				<Panel header="5 Random Roadmaps">
 					<div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
-						{shuffle(cache.filter((ci) => ci.thing.type === "roadmap"))
+						{shuffle(data.roadmaps)
 							.slice(0, 5)
-							.map((ci) => (
+							.map((roadmap) => (
 								<Button
-									key={JSON.stringify(ci)}
-									onClick={() => nav(`/${ci.thing_id}`)}
+									key={JSON.stringify(roadmap)}
+									onClick={() => nav(`/${roadmap.id}`)}
 								>
-									{ci.thing.value.title}
+									{roadmap.title}
 								</Button>
 							))}
 					</div>
 
 					<br />
-					<Link to={`/roadmaps`}>
-						See all {cache.filter((ci) => ci.thing.type === "roadmap").length} Roadmaps
-					</Link>
+					<Link to={`/roadmaps`}>See all {data.roadmaps.length} Roadmaps</Link>
 				</Panel>
 			</div>
 		</>

@@ -1,12 +1,10 @@
 import { useContext } from "react";
-import { useNavigate } from "react-router-dom";
 import { CustomLink } from "./CustomLink";
-import { context } from "freeflow-react";
 import { UserFeed } from "./UserFeed";
+import { ServerSyncContext } from "react_stream/dist/ServerSyncContext";
 export const Root = () => {
-	var nav = useNavigate();
-	var { profiles_seed } = useContext(context);
-	if (profiles_seed.length !== 0) {
+	var { parsed_virtual_localstorage } = useContext(ServerSyncContext);
+	if (parsed_virtual_localstorage.active_username) {
 		return <UserFeed />;
 	} else {
 		return (
@@ -59,10 +57,6 @@ export const Root = () => {
 						our journey!
 					</p>
 
-					<CustomLink
-						text={"m.alami1383@gmail.com"}
-						icon={<i className="bi bi-envelope flex items-center" />}
-					/>
 					<CustomLink
 						text={"hamedpro30@gmail.com"}
 						icon={<i className="bi bi-envelope flex items-center" />}

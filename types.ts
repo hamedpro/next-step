@@ -1,4 +1,3 @@
-import { core_thing, thing_base } from "freeflow-core/dist/UnifiedHandler_types";
 export type lab = {
 	title: string;
 	description: string; // markdown
@@ -20,22 +19,7 @@ export type step = {
 export type roadmap = {
 	title: string;
 	description: string;
+	id: number;
 };
-export interface roadmap_thing extends thing_base {
-	type: "roadmap";
-	value: roadmap;
-}
-export interface step_thing extends thing_base {
-	type: "step";
-	value: step;
-}
-export interface lab_thing extends thing_base {
-	type: "lab";
-	value: lab;
-}
-export type app_thing = core_thing | roadmap_thing | step_thing;
 export type roadmap_collection = { title: string; roadmaps: { id: number }[]; description: string };
-export interface roadmap_collection_thing extends thing_base {
-	type: "roadmap_collection";
-	value: roadmap_collection;
-}
+export type user = { username: string; password: string; active_roadmap?: number };
