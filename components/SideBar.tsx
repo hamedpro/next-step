@@ -9,14 +9,9 @@ export const SideBar = ({ visible, onHide }: { visible: boolean; onHide: () => v
 		>
 			<h2 style={{ marginTop: "0px" }}>welcome to Next Step!</h2>
 			<CustomLink
-				icon={<i className="bi-person-plus" />}
-				text="Register a new account"
-				url="/register"
-			/>
-			<CustomLink
 				icon={<i className="bi-box-arrow-in-right" />}
-				text="Login into your account"
-				url="/login"
+				text="Register or Login"
+				url="/auth"
 			/>
 
 			<CustomLink

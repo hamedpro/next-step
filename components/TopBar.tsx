@@ -1,16 +1,18 @@
-import { calc_file_url, find_active_profile_seed } from "freeflow-core/dist/utils";
-import { context } from "freeflow-react";
 import { Button } from "primereact/button";
-import React, { useContext, useState } from "react";
+import { useContext, useState } from "react";
 import { SearchModal } from "./SearchModal";
 import { useNavigate } from "react-router-dom";
 import { SideBar } from "./SideBar";
 import { InputText } from "primereact/inputtext";
+import { ServerSyncContext } from "react_stream/dist/ServerSyncContext";
+import { user } from "../types";
 
 export const TopBar = () => {
-	var { profiles_seed, cache, rest_endpoint } = useContext(context);
-	var active_user_id = find_active_profile_seed(profiles_seed)?.user_id;
-	var active_user = cache.find((ci) => ci.thing_id === active_user_id);
+	var { data, parsed_virtual_localstorage } = useContext(ServerSyncContext);
+	var user = data.users.find(
+		(u: user) => u.username === parsed_virtual_localstorage.active_username
+	) as user;
+
 	var [search_modal, set_seach_modal] = useState(false);
 	var [sidebar, set_sidebar] = useState(false);
 	var nav = useNavigate();
@@ -74,46 +76,15 @@ export const TopBar = () => {
 						icon="bi bi-search"
 						className="p-button-success sm:hidden"
 					/>
-					{(active_user_id || 0) === 0 ? (
-						<Button
-							onClick={() => nav(`/login`)}
-							style={{
-								height: "45px",
-								display: "flex",
-								justifyContent: "center",
-								alignItems: "center",
-							}}
-						>
-							Login
-						</Button>
-					) : active_user?.thing.value.profile_image_file_id ? (
-						<img
-							style={{ width: "45px", height: "45px" }}
-							src={calc_file_url(
-								profiles_seed,
-								rest_endpoint,
-								active_user?.thing.value.profile_image_file_id
-							)}
-						/>
-					) : active_user_id === -1 ? (
-						<i
-							onClick={() =>
-								alert(
-									`your active profile is system profile. its a virtual profile.`
-								)
-							}
-							style={{ fontSize: "45px" }}
-							className={`bi bi-person-gear`}
-						/>
-					) : (
+					{
 						<i
 							onClick={() => {
-								nav(`/${active_user_id}`);
+								nav(`/${user.username}`);
 							}}
 							style={{ fontSize: "45px" }}
 							className={`bi bi-person-fill`}
 						/>
-					)}
+					}
 				</div>
 			</div>
 		</>

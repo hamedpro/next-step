@@ -1,5 +1,5 @@
 import { useContext } from "react";
-//import { TopBar } from "./TopBar";
+import { TopBar } from "./TopBar";
 import { Panel } from "primereact/panel";
 import { Button } from "primereact/button";
 import { Link, useNavigate } from "react-router-dom";
@@ -18,7 +18,7 @@ export const UserFeed = () => {
 
 	return (
 		<>
-			{/* <TopBar /> */}
+			<TopBar />
 			<div style={{ padding: "12px" }}>
 				<h1>User Feed</h1>
 				<br />
