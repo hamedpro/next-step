@@ -4,11 +4,11 @@ import {
 	profile_seed,
 	user,
 } from "freeflow-core/dist/UnifiedHandler_types";
-import { step_thing } from "../../types";
+import { step_thing } from "../types";
 import { context } from "freeflow-react";
 import { MultiSelect } from "primereact/multiselect";
 import { useContext, useEffect, useState } from "react";
-import { step } from "../../types";
+import { step } from "../types";
 import { Rating } from "primereact/rating";
 import { InputText } from "primereact/inputtext";
 import { Button } from "primereact/button";

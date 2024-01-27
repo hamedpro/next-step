@@ -1,4 +1,4 @@
-import { roadmap_thing, step_thing } from "../types";
+import { roadmap_thing, step_thing } from "./types";
 import { cache_item, core_thing } from "freeflow-core/dist/UnifiedHandler_types";
 export function steps_to_dot(steps: cache_item<step_thing>[]) {
 	var formatted_data: { [key: string]: string[] } = {};

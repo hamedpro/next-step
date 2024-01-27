@@ -3,7 +3,7 @@ import { ReactNode, useContext, useMemo, useState } from "react";
 import { steps_to_dot } from "../helpers";
 import { context } from "freeflow-react";
 import { cache_item } from "freeflow-core/dist/UnifiedHandler_types";
-import { roadmap_collection_thing, step_thing } from "../../types";
+import { roadmap_collection_thing, step_thing } from "../types";
 import { find_active_profile_seed } from "freeflow-core/dist/utils";
 import { SelectButton } from "primereact/selectbutton";
 import { useWindowSize } from "@uidotdev/usehooks";

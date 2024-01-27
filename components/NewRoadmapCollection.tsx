@@ -1,6 +1,6 @@
 import { useContext, useState } from "react";
 import { CustomTitle } from "./CustomTitle";
-import { roadmap_collection } from "../../types";
+import { roadmap_collection } from "../types";
 import { profile_seed } from "freeflow-core/dist/UnifiedHandler_types";
 import { find_active_profile_seed } from "freeflow-core/dist/utils";
 import { context } from "freeflow-react";

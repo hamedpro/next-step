@@ -6,7 +6,7 @@ import { TabMenu } from "primereact/tabmenu";
 import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { context } from "freeflow-react";
-import { roadmap } from "../../types";
+import { roadmap } from "../types";
 import { find_active_profile } from "freeflow-core/dist/utils";
 import { profile } from "freeflow-core/dist/UnifiedHandler_types";
 import { CustomTitle } from "./CustomTitle";

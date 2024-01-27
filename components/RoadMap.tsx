@@ -3,7 +3,7 @@ import { context } from "freeflow-react";
 import { InputText } from "primereact/inputtext";
 import { useContext, useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { roadmap, step_thing } from "../../types";
+import { roadmap, step_thing } from "../types";
 import { InputTextarea } from "primereact/inputtextarea";
 import { Button } from "primereact/button";
 import { find_active_profile, find_active_profile_seed } from "freeflow-core/dist/utils";

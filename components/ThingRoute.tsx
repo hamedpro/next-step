@@ -3,7 +3,7 @@ import { context } from "freeflow-react";
 import { useParams } from "react-router-dom";
 import { cache, cache_item } from "freeflow-core/dist/UnifiedHandler_types";
 import { RoadMap } from "./RoadMap";
-import { app_thing, roadmap_collection_thing, roadmap_thing, step_thing } from "../../types";
+import { app_thing, roadmap_collection_thing, roadmap_thing, step_thing } from "../types";
 import { Step } from "./Step";
 import { RoadmapCollection } from "./RoadmapCollection";
 export const ThingRoute = () => {

@@ -1,5 +1,5 @@
 import { cache_item } from "freeflow-core/dist/UnifiedHandler_types";
-import { roadmap_collection_thing } from "../../types";
+import { roadmap_collection_thing } from "../types";
 
 import { profile, profile_seed } from "freeflow-core/dist/UnifiedHandler_types";
 import { context } from "freeflow-react";

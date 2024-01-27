@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { lab_thing } from "../../types";
+import { lab_thing } from "../types";
 import { context } from "freeflow-react";
 import { Button } from "primereact/button";
 import { useParams } from "react-router-dom";

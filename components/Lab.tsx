@@ -1,6 +1,6 @@
 import { cache_item } from "freeflow-core/dist/UnifiedHandler_types";
 import { useContext, useEffect, useState } from "react";
-import { lab_thing } from "../../types";
+import { lab_thing } from "../types";
 import ReactMarkdown from "react-markdown";
 import { context } from "freeflow-react";
 import { InputText } from "primereact/inputtext";

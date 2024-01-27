@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import { context } from "freeflow-react";
 import { cache_item } from "freeflow-core/dist/UnifiedHandler_types";
-import { roadmap_collection_thing } from "../../types";
+import { roadmap_collection_thing } from "../types";
 import { CustomCard } from "./CustomCard";
 import { CustomPanel } from "./CustomPanel";
 
