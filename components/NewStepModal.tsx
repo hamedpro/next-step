@@ -1,26 +1,24 @@
-import { cache_item, profile, profile_seed } from "freeflow-core/dist/UnifiedHandler_types";
-import { find_active_profile, find_active_profile_seed } from "freeflow-core/dist/utils";
-import { context } from "freeflow-react";
 import { Dialog } from "primereact/dialog";
 import { useContext, useState } from "react";
-import { roadmap_thing, step } from "../types";
+import { roadmap, step } from "../types";
 import { InputText } from "primereact/inputtext";
 import { Button } from "primereact/button";
 import { InputTextarea } from "primereact/inputtextarea";
 import { useNavigate } from "react-router-dom";
+import { ServerSyncContext } from "react_stream/dist/ServerSyncContext";
 export const NewStepModal = ({
 	active,
-	roadmap,
+	roadmap_data,
 	roadmap_steps,
 	onHide,
 }: {
-	roadmap: cache_item<roadmap_thing>;
+	roadmap_data: [number, "roadmap", roadmap];
 	active: boolean;
-	roadmap_steps: cache_item<any>[];
+	roadmap_steps: [number, "step", step][];
 	onHide: () => void;
 }) => {
 	var nav = useNavigate();
-	var freeflow_context = useContext(context);
+	var { data, parsed_virtual_localstorage, server_post_verb } = useContext(ServerSyncContext);
 
 	var [new_step, set_new_step] = useState<step>({
 		title: "",
@@ -28,27 +26,14 @@ export const NewStepModal = ({
 		weight: 1,
 		assets: [],
 		prerequisites: [],
-		roadmap_id: roadmap.thing_id,
+		roadmap_id: roadmap_data[0],
 	});
 
 	async function submit_new_step() {
-		var current_profile: profile | undefined = find_active_profile(freeflow_context.profiles);
-
-		if (current_profile === undefined) {
-			alert("there is not any active profile");
-			return;
-		}
-		//console.log(new_step);
-		var { meta_id, thing_id } = await freeflow_context.request_new_thing({
-			thing: {
-				type: "step",
-				value: new_step,
-			},
-
-			thing_privileges: { read: "*", write: [-1] },
+		server_post_verb((prev, max_existing_id) => {
+			prev.push([max_existing_id + 1, "step", new_step]);
 		});
 		onHide();
-		nav(`/${thing_id}`);
 	}
 	return (
 		<Dialog

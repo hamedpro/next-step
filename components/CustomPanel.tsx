@@ -1,5 +1,5 @@
 import { Panel } from "primereact/panel";
-import React, { ReactNode } from "react";
+import { ReactNode } from "react";
 
 export const CustomPanel = ({
 	children,

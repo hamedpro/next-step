@@ -1,13 +1,13 @@
-import { cache_item } from "freeflow-core/dist/UnifiedHandler_types";
-import { context } from "freeflow-react";
 import { useContext } from "react";
 import { Button } from "primereact/button";
 import { useNavigate } from "react-router-dom";
 import { CustomTitle } from "./CustomTitle";
+import { ServerSyncContext } from "react_stream/dist/ServerSyncContext";
+import { roadmap } from "../types";
 export const RoadMaps = () => {
-	var { cache } = useContext(context);
-	var roadmaps: cache_item<any>[] = cache.filter((ci) => ci.thing.type === "roadmap");
 	var nav = useNavigate();
+	var { data } = useContext(ServerSyncContext);
+
 	return (
 		<div style={{ padding: "12px" }}>
 			<CustomTitle
@@ -23,20 +23,20 @@ export const RoadMaps = () => {
 						padding: "0px 20px",
 					}}
 				>
-					{roadmaps.length} Items
+					{data.roadmaps.length} Items
 				</div>
 			</CustomTitle>
 			<hr />
 			<div style={{ display: "flex", gap: "10px", flexWrap: "wrap", marginTop: "25px" }}>
-				{roadmaps.map((ci) => (
+				{data.roadmaps.map((roadmap: roadmap) => (
 					<Button
 						style={{ minWidth: "60px" }}
-						key={ci.thing_id}
+						key={roadmap.id}
 						onClick={() => {
-							nav(`/${ci.thing_id}`);
+							nav(`/${roadmap.id}`);
 						}}
 					>
-						{ci.thing.value.title}
+						{roadmap.title}
 					</Button>
 				))}
 			</div>

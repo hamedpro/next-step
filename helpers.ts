@@ -1,21 +1,19 @@
-import { roadmap_thing, step_thing } from "./types";
-import { cache_item, core_thing } from "freeflow-core/dist/UnifiedHandler_types";
-export function steps_to_dot(steps: cache_item<step_thing>[]) {
+import { store_standard_type } from "react_stream/dist/utils";
+import { roadmap, step } from "./types";
+export function steps_to_dot(steps_data: [number, "step", step][]) {
 	var formatted_data: { [key: string]: string[] } = {};
-	steps.forEach((step) => {
-		if ("prerequisites" in step.thing.value && step.thing.value.prerequisites !== undefined) {
-			(step.thing.value.prerequisites as Array<number>).forEach((prereq) => {
-				if (formatted_data[prereq] === undefined) {
-					formatted_data[prereq] = [];
-				}
-				formatted_data[prereq].push(step.thing_id.toString());
-			});
-		}
+	steps_data.forEach(([step_id, type, step]) => {
+		step.prerequisites.forEach((prereq) => {
+			if (formatted_data[prereq] === undefined) {
+				formatted_data[prereq] = [];
+			}
+			formatted_data[prereq].push(step_id.toString());
+		});
 	});
 	var nodes = shuffle(
-		steps.map(
-			(step) =>
-				`"${step.thing_id}" [id="step-${step.thing_id}",label="${step.thing.value.title}",shape=box]`
+		steps_data.map(
+			([step_id, type, step]) =>
+				`"${step_id}" [id="step-${step_id}",label="${step.title}",shape=box]`
 		)
 	);
 
@@ -56,13 +54,13 @@ export function steps_to_dot(steps: cache_item<step_thing>[]) {
 	return tmp;
 }
 export function roadmap_to_dot(
-	cache: cache_item<core_thing | step_thing>[],
-	roadmap_ci: cache_item<roadmap_thing>
+	data: store_standard_type,
+	roadmap_data: [number, "roadmap", roadmap]
 ): string {
-	var steps = cache.filter(
-		(ci) => ci.thing.type === "step" && ci.thing.value.roadmap_id === roadmap_ci.thing_id
-	);
-	return steps_to_dot(steps as cache_item<step_thing>[]);
+	var steps = data.filter(
+		([id, type, value]) => type === "step" && value.roadmap_id === roadmap_data[0]
+	) as [number, "step", step][];
+	return steps_to_dot(steps);
 }
 export function shuffle(array: any[]) {
 	let currentIndex = array.length,

@@ -4,10 +4,12 @@ import "bootstrap-icons/font/bootstrap-icons.css";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Auth } from "./components/Auth";
 import { Root } from "./components/Root";
-/* import { RoadMaps } from "./components/RoadMaps";
+import { RoadMaps } from "./components/RoadMaps";
+import { ThingRoute } from "./components/ThingRoute";
+/* 
 import { NewRoadMap } from "./components/NewRoadMap";
 import { Root } from "./components/Root";
-import { ThingRoute } from "./components/ThingRoute";
+
 import { StepLabs } from "./components/StepLabs";
 import { NewRoadmapCollection } from "./components/NewRoadmapCollection";
 import { RoadmapCollections } from "./components/RoadmapCollections";
@@ -24,21 +26,15 @@ export function App() {
 					path="/auth"
 					element={<Auth />}
 				/>
-
-				{/* 
-
-				
-
-					<Route
-						element={<RoadMaps />}
-						path="/roadmaps"
-					/>
-					<Route
-						element={<ThingRoute />}
-						path="/:thing_id"
-					/>
-
-					<Route
+				<Route
+					element={<RoadMaps />}
+					path="/roadmaps"
+				/>
+				<Route
+					element={<ThingRoute />}
+					path="/:thing_id"
+				/>
+				{/* <Route
 						element={<NewRoadMap />}
 						path="/roadmaps/new"
 					/>

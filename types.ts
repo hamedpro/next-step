@@ -19,7 +19,11 @@ export type step = {
 export type roadmap = {
 	title: string;
 	description: string;
-	id: number;
 };
 export type roadmap_collection = { title: string; roadmaps: { id: number }[]; description: string };
-export type user = { username: string; password: string; active_roadmap?: number };
+export type user = {
+	username: string;
+	password: string;
+	active_roadmap?: number;
+	active_roadmap_collection?: number;
+};
