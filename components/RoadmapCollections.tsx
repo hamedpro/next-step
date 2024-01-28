@@ -2,17 +2,17 @@ import { Button } from "primereact/button";
 import { CustomTitle } from "./CustomTitle";
 import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
-import { context } from "freeflow-react";
-import { cache_item } from "freeflow-core/dist/UnifiedHandler_types";
-import { roadmap_collection_thing } from "../types";
-import { CustomCard } from "./CustomCard";
 import { CustomPanel } from "./CustomPanel";
+import { ServerSyncContext } from "react_stream/dist/ServerSyncContext";
+import { roadmap_collection } from "../types";
 
 export const RoadmapCollections = () => {
-	var { cache } = useContext(context);
-	var roadmap_collections = cache.filter(
-		(ci) => ci.thing.type === "roadmap_collection"
-	) as cache_item<roadmap_collection_thing>[];
+	var { data } = useContext(ServerSyncContext);
+	var roadmap_collections = data.filter(([id, type, value]) => type === "roadmap_collection") as [
+		number,
+		"roadmap_collection",
+		roadmap_collection
+	][];
 	var nav = useNavigate();
 	return (
 		<div style={{ padding: "8px" }}>
@@ -42,12 +42,12 @@ export const RoadmapCollections = () => {
 					flexDirection: "column",
 				}}
 			>
-				{roadmap_collections.map((coll) => (
+				{roadmap_collections.map(([id, type, roadmap_collection]) => (
 					<CustomPanel
-						key={coll.thing_id}
-						panel_title={`roadmap #${coll.thing_id}`}
+						key={id}
+						panel_title={`roadmap #${id}`}
 						bootstrap_icon="bi-signpost-2"
-						icon_title={coll.thing.value.title}
+						icon_title={roadmap_collection.title}
 					>
 						<div
 							style={{
@@ -57,10 +57,10 @@ export const RoadmapCollections = () => {
 								rowGap: "12px",
 							}}
 						>
-							{coll.thing.value.description}
+							{roadmap_collection.description}
 							<Button
 								style={{ width: "fit-content" }}
-								onClick={() => nav(`/${coll.thing_id}`)}
+								onClick={() => nav(`/${id}`)}
 							>
 								Jump In
 							</Button>

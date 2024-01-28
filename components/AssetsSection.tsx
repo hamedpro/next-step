@@ -1,8 +1,6 @@
-import { find_active_profile_seed } from "freeflow-core/dist/utils";
-import { context } from "freeflow-react";
 import { Button } from "primereact/button";
 import { FileUpload, FileUploadHandlerEvent } from "primereact/fileupload";
-import React, { useContext } from "react";
+import { useContext } from "react";
 
 export const AssetsSection = ({
 	file_ids,
@@ -17,7 +15,8 @@ export const AssetsSection = ({
 	onUpload: (file_id: number) => void;
 	change_mode: boolean;
 }) => {
-	var { download_tar_archive, download_a_file, profiles_seed, configured_axios, cache } =
+	return "AssetsSection is not converted yet";
+	/* var { download_tar_archive, download_a_file, profiles_seed, configured_axios, cache } =
 		useContext(context);
 	var active_prof_seed = find_active_profile_seed(profiles_seed);
 	async function uploadHandler(e: FileUploadHandlerEvent) {
@@ -114,5 +113,5 @@ export const AssetsSection = ({
 				))}
 			</div>
 		</div>
-	);
+	); */
 };

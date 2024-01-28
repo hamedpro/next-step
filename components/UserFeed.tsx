@@ -9,10 +9,11 @@ import { roadmap, user } from "../types";
 export const UserFeed = () => {
 	var { data, parsed_virtual_localstorage } = useContext(ServerSyncContext);
 	var nav = useNavigate();
-	var active_user = data.users.find(
-		(u: user) => u.username === parsed_virtual_localstorage.active_username
-	) as user;
-	if (!active_user) {
+	var active_user = data.find(
+		([id, type, value]) =>
+			type === "user" && value.username === parsed_virtual_localstorage.active_username
+	) as [number, "user", user] | undefined;
+	if (active_user === undefined) {
 		return "active user not found";
 	}
 
@@ -27,17 +28,18 @@ export const UserFeed = () => {
 					<h1 style={{ margin: "0px" }}>
 						<i className="bi bi-signpost-2" /> Your Active Roadmap
 					</h1>
-					{active_user.active_roadmap ? (
+					{active_user[2].active_roadmap ? (
 						<>
 							<p>
 								{
-									data.roadmaps.find(
-										(roadmap: roadmap) =>
-											roadmap.id === active_user.active_roadmap
-									)?.title
+									data.find(
+										([id, type, value]) =>
+											active_user![2].active_roadmap === id &&
+											type === "roadmap"
+									)?.[2].title
 								}
 							</p>
-							<Button onClick={() => nav(`/${active_user.active_roadmap}`)}>
+							<Button onClick={() => nav(`/${active_user![2].active_roadmap}`)}>
 								Jump In
 							</Button>
 						</>
@@ -51,20 +53,29 @@ export const UserFeed = () => {
 				<br />
 				<Panel header="5 Random Roadmaps">
 					<div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
-						{shuffle(data.roadmaps)
+						{shuffle(
+							data.find(([id, type, value]) => type === "roadmap") as [
+								number,
+								"roadmap",
+								roadmap
+							]
+						)
 							.slice(0, 5)
-							.map((roadmap) => (
+							.map(([id, type, value]) => (
 								<Button
-									key={JSON.stringify(roadmap)}
-									onClick={() => nav(`/${roadmap.id}`)}
+									key={JSON.stringify([id, type, value])}
+									onClick={() => nav(`/${id}`)}
 								>
-									{roadmap.title}
+									{value.title}
 								</Button>
 							))}
 					</div>
 
 					<br />
-					<Link to={`/roadmaps`}>See all {data.roadmaps.length} Roadmaps</Link>
+					<Link to={`/roadmaps`}>
+						See all {data.filter(([id, type, value]) => type === "roadmap").length}{" "}
+						Roadmaps
+					</Link>
 				</Panel>
 			</div>
 		</>

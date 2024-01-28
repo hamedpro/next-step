@@ -10,22 +10,24 @@ export const Auth = () => {
 	var { data, server_post_verb, set_virtual_localstorage } = useContext(ServerSyncContext);
 	const [username, setUsername] = useState("");
 	const [password, setPassword] = useState("");
-
+	var user = data.find(([id, type, value]) => value.username === username && type === "user") as
+		| [number, "user", user]
+		| undefined;
 	function login() {
-		var user = data.users.find((user: user) => user.username === username);
 		if (!user) {
 			throw new Error("User not found");
 		}
-		if (user.password !== password) {
+		if (user[2].password !== password) {
 			alert("password incorrect");
 		} else {
-			set_virtual_localstorage(JSON.stringify({ active_username: user.username }));
+			set_virtual_localstorage(JSON.stringify({ active_username: user[2].username }));
 			nav("/");
 		}
 	}
 	function register() {
-		server_post_verb((prev) => {
-			prev.users.push({ username, password });
+		server_post_verb((prev, max_existing_id) => {
+			var new_user: user = { username, password };
+			prev.push([max_existing_id + 1, "user", new_user]);
 		});
 		set_virtual_localstorage(JSON.stringify({ active_username: username }));
 		nav("/");
@@ -48,7 +50,7 @@ export const Auth = () => {
 					setPassword(event.target.value)
 				}
 			/>
-			{data.users.find((user: user) => user.username === username) ? (
+			{user ? (
 				<Button onClick={login}>Login</Button>
 			) : (
 				<Button onClick={register}>Register</Button>

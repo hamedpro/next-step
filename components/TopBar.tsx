@@ -9,9 +9,13 @@ import { user } from "../types";
 
 export const TopBar = () => {
 	var { data, parsed_virtual_localstorage } = useContext(ServerSyncContext);
-	var user = data.users.find(
-		(u: user) => u.username === parsed_virtual_localstorage.active_username
-	) as user;
+	var user = data.find(
+		([id, type, value]) =>
+			type === "user" && value.username === parsed_virtual_localstorage.active_username
+	) as [number, "user", user] | undefined;
+	if (user === undefined) {
+		return <div>couldn't find user in cache</div>;
+	}
 
 	var [search_modal, set_seach_modal] = useState(false);
 	var [sidebar, set_sidebar] = useState(false);
@@ -79,7 +83,7 @@ export const TopBar = () => {
 					{
 						<i
 							onClick={() => {
-								nav(`/${user.username}`);
+								nav(`/${user![0]}`);
 							}}
 							style={{ fontSize: "45px" }}
 							className={`bi bi-person-fill`}

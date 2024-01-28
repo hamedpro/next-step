@@ -23,22 +23,24 @@ export const RoadMaps = () => {
 						padding: "0px 20px",
 					}}
 				>
-					{data.roadmaps.length} Items
+					{data.filter(([id, type, value]) => type === "roadmap").length} Items
 				</div>
 			</CustomTitle>
 			<hr />
 			<div style={{ display: "flex", gap: "10px", flexWrap: "wrap", marginTop: "25px" }}>
-				{data.roadmaps.map((roadmap: roadmap) => (
-					<Button
-						style={{ minWidth: "60px" }}
-						key={roadmap.id}
-						onClick={() => {
-							nav(`/${roadmap.id}`);
-						}}
-					>
-						{roadmap.title}
-					</Button>
-				))}
+				{data
+					.filter(([id, type, value]) => type === "roadmap")
+					.map(([id, type, roadmap]) => (
+						<Button
+							style={{ minWidth: "60px" }}
+							key={id}
+							onClick={() => {
+								nav(`/${id}`);
+							}}
+						>
+							{roadmap.title}
+						</Button>
+					))}
 			</div>
 		</div>
 	);

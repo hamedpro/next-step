@@ -5,18 +5,21 @@ import { CustomCard } from "./CustomCard";
 import { Button } from "primereact/button";
 import { useNavigate } from "react-router-dom";
 import { ServerSyncContext } from "react_stream/dist/ServerSyncContext";
+import { store_standard_type } from "react_stream/dist/utils";
 export const SearchModal = ({ visible, onHide }: { visible: boolean; onHide: () => void }) => {
 	var { data } = useContext(ServerSyncContext);
 	var [search_query, set_search_query] = useState("");
-	var search_entries = ["roadmaps", "users", "steps", "roadmap_collections", "labs"];
-	var search_results: { type: string; value: any }[] =
+	var search_types = ["roadmaps", "users", "steps", "roadmap_collections", "labs"];
+	var search_results: store_standard_type =
 		search_query === ""
 			? []
-			: search_entries
-					.map((key) => {
-						return data[key]
-							.filter((item: any) => JSON.stringify(item).includes(search_query))
-							.map((item: any) => ({ type: key, value: item }));
+			: search_types
+					.map((search_type) => {
+						return data
+							.filter(([id, type, value]) => type === search_type)
+							.filter(([id, type, value]) =>
+								JSON.stringify(value).includes(search_query)
+							);
 					})
 					.flat();
 	var nav = useNavigate();
@@ -35,7 +38,7 @@ export const SearchModal = ({ visible, onHide }: { visible: boolean; onHide: () 
 					alignItems: "center",
 				}}
 			>
-				<h1>Search in {search_entries.join(",")}</h1>
+				<h1>Search in {search_types.join(",")}</h1>
 				<b>found {search_results.length} results</b>
 			</div>
 			<InputText
@@ -56,9 +59,9 @@ export const SearchModal = ({ visible, onHide }: { visible: boolean; onHide: () 
 											alignItems: "center",
 										}}
 									>
-										<b>{search_result.type}</b>
-										<b>{JSON.stringify(search_result.value)}</b>
-										<Button onClick={() => nav(`/` + search_result.value.id)}>
+										<b>{search_result[1]}</b>
+										<b>{JSON.stringify(search_result[2])}</b>
+										<Button onClick={() => nav(`/` + search_result[0])}>
 											Jump In
 										</Button>
 									</div>

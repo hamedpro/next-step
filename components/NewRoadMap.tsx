@@ -5,60 +5,54 @@ import { InputText } from "primereact/inputtext";
 import { TabMenu } from "primereact/tabmenu";
 import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { context } from "freeflow-react";
-import { roadmap } from "../types";
-import { find_active_profile } from "freeflow-core/dist/utils";
-import { profile } from "freeflow-core/dist/UnifiedHandler_types";
+import { roadmap, step } from "../types";
 import { CustomTitle } from "./CustomTitle";
 import ReactMarkdown from "react-markdown";
+import { ServerSyncContext } from "react_stream/dist/ServerSyncContext";
+
 export const NewRoadMap = () => {
-	//const toast_ref = useRef<Toast>(null);
-	var freeflow_context = useContext(context);
 	var nav = useNavigate();
+
+	var { data, server_post_verb } = useContext(ServerSyncContext);
+
 	var [description, set_description] = useState("");
 	var [title, set_title] = useState("");
+
 	async function submit() {
-		//toast_ref.current?.show({ severity: "info", summary: "Info", detail: "Message Content" });
-
-		var current_profile: profile | undefined = find_active_profile(freeflow_context.profiles);
-		if (current_profile === undefined) {
-			alert("there is not any active profile");
-			return;
-		}
-
 		var value: roadmap = { title, description };
-		var roadmap_id = (
-			await freeflow_context.request_new_thing({
-				thing: { type: "roadmap", value },
-				thing_privileges: { read: "*", write: [current_profile.user_id] },
-			})
-		).thing_id;
+		var ref: { roadmap_id: number | undefined } = { roadmap_id: undefined };
+		server_post_verb((prev, max_existing_id) => {
+			ref.roadmap_id = max_existing_id + 1;
+			prev.push([ref.roadmap_id, "roadmap", value]);
+		});
+		if (ref.roadmap_id === undefined) {
+			throw new Error("internal error. roadmap_id must not be undefined here");
+		}
 		if (mode === "bootstrap_mode") {
 			var steps = JSON.parse(bootstrap_json);
-			var last_submitted_step_id: number | undefined = undefined;
+			var ref2: { last_submitted_step_id: number | undefined } = {
+				last_submitted_step_id: undefined,
+			};
 			for (var i = 0; i < steps.length; i++) {
 				var step = steps[i];
-				last_submitted_step_id = (
-					await freeflow_context.request_new_thing({
-						thing: {
-							type: "step",
-							value: {
-								title: step.title,
-								description: step.description,
-								prerequisites:
-									last_submitted_step_id === undefined
-										? []
-										: [last_submitted_step_id],
-								roadmap_id,
-							},
-						},
-						thing_privileges: { read: "*", write: [-1] },
-					})
-				).thing_id;
+				server_post_verb((prev, max_existing_id) => {
+					var new_step: step = {
+						title: step.title,
+						description: step.description,
+						roadmap_id: ref.roadmap_id as number,
+						weight: 0,
+						prerequisites:
+							ref2.last_submitted_step_id === undefined
+								? []
+								: [ref2.last_submitted_step_id],
+					};
+					ref2.last_submitted_step_id = max_existing_id + 1;
+					prev.push([ref2.last_submitted_step_id, "step", new_step]);
+				});
 			}
 		}
-		alert(`submitted : roadmap_id = ${roadmap_id}`);
-		nav(`/${roadmap_id}`);
+		alert(`submitted : roadmap_id = ${ref.roadmap_id}`);
+		nav(`/${ref.roadmap_id}`);
 	}
 	var [mode, set_mode] = useState<"bootstrap_mode" | "init_mode">("bootstrap_mode");
 	var [bootstrap_json, set_bootstrap_json] = useState<string>("[]");

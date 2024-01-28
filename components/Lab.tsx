@@ -1,32 +1,30 @@
-import { cache_item } from "freeflow-core/dist/UnifiedHandler_types";
 import { useContext, useEffect, useState } from "react";
-import { lab_thing } from "../types";
 import ReactMarkdown from "react-markdown";
-import { context } from "freeflow-react";
 import { InputText } from "primereact/inputtext";
 import { ToggleButton } from "primereact/togglebutton";
 import { InputTextarea } from "primereact/inputtextarea";
 import { Button } from "primereact/button";
-import { find_active_profile_seed } from "freeflow-core/dist/utils";
 import { AssetsSection } from "./AssetsSection";
+import { lab } from "../types";
+import { ServerSyncContext } from "react_stream/dist/ServerSyncContext";
 
-export const Lab = ({ lab }: { lab: cache_item<lab_thing> }) => {
-	var { profiles_seed, request_new_transaction } = useContext(context);
+export const Lab = ({ lab }: { lab: [number, "lab", lab] }) => {
+	var { data, server_post_verb } = useContext(ServerSyncContext);
 
-	var [new_lab, set_new_lab] = useState(lab.thing.value);
-	var active_prof_seed = find_active_profile_seed(profiles_seed);
+	var [new_lab, set_new_lab] = useState(lab[2]);
 	useEffect(() => {
-		set_new_lab(() => lab.thing.value);
-	}, [JSON.stringify(lab.thing.value)]);
+		set_new_lab(() => lab[2]);
+	}, [JSON.stringify(lab[2])]);
 
 	var [markdown_edit_mode, set_markdown_edit_mode] = useState(false);
+
 	async function apply_changes() {
-		await request_new_transaction({
-			thing_id: lab.thing_id,
-			new_thing_creator: (prev) => ({
-				...prev,
-				value: new_lab,
-			}),
+		server_post_verb((prev) => {
+			var pointer = prev.find(([id, type, value]) => id === lab[0]);
+			if (!pointer) {
+				throw new Error("lab not found");
+			}
+			pointer[2] = new_lab;
 		});
 	}
 
@@ -43,35 +41,29 @@ export const Lab = ({ lab }: { lab: cache_item<lab_thing> }) => {
 			}}
 		>
 			<div style={{ display: "flex", justifyContent: "space-between" }}>
-				{active_prof_seed?.user_id === -1 ? (
-					<div
-						style={{
-							display: "flex",
-							flexDirection: "row",
-							columnGap: "10px",
-							alignItems: "center",
-						}}
-					>
-						<h4>title: </h4>
-						<InputText
-							value={new_lab["title"]}
-							onChange={(e) =>
-								set_new_lab((prev) => ({ ...prev, title: e.target.value }))
-							}
-						/>
-					</div>
-				) : (
-					<h1 style={{ marginTop: "10px" }}>{new_lab["title"]}</h1>
-				)}
-				{active_prof_seed?.user_id === -1 && (
-					<Button
-						onClick={apply_changes}
-						disabled={JSON.stringify(lab.thing.value) === JSON.stringify(new_lab)}
-						icon="bi bi-floppy2-fill pr-2"
-					>
-						<span className="hidden sm:inline-block">Apply Changes</span>
-					</Button>
-				)}
+				<div
+					style={{
+						display: "flex",
+						flexDirection: "row",
+						columnGap: "10px",
+						alignItems: "center",
+					}}
+				>
+					<h4>title: </h4>
+					<InputText
+						value={new_lab["title"]}
+						onChange={(e) =>
+							set_new_lab((prev) => ({ ...prev, title: e.target.value }))
+						}
+					/>
+				</div>
+				<Button
+					onClick={apply_changes}
+					disabled={JSON.stringify(lab[2]) === JSON.stringify(new_lab)}
+					icon="bi bi-floppy2-fill pr-2"
+				>
+					<span className="hidden sm:inline-block">Apply Changes</span>
+				</Button>
 			</div>
 			<div
 				style={{
