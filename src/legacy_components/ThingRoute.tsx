@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import { useParams } from "react-router-dom";
 import { ServerSyncContext } from "react_stream/dist/ServerSyncContext";
-import { roadmap, roadmap_collection, step, user } from "../types";
+import { roadmap, roadmap_collection, step, user } from "../../types";
 import { Step } from "./Step";
 import { RoadMap } from "./RoadMap";
 import { RoadmapCollection } from "./RoadmapCollection";

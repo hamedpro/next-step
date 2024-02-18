@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { useState } from "react";
 import { InputText } from "primereact/inputtext";
 import { ServerSyncContext } from "react_stream/dist/ServerSyncContext";
-import { user } from "../types";
+import { user } from "../../types";
 import { Button } from "primereact/button";
 import { useNavigate } from "react-router";
 export const Auth = () => {

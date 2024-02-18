@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { SideBar } from "./SideBar";
 import { InputText } from "primereact/inputtext";
 import { ServerSyncContext } from "react_stream/dist/ServerSyncContext";
-import { user } from "../types";
+import { user } from "../../types";
 
 export const TopBar = () => {
 	var { data, parsed_virtual_localstorage } = useContext(ServerSyncContext);

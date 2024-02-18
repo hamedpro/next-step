@@ -4,8 +4,8 @@ import { InputText } from "primereact/inputtext";
 import { ToggleButton } from "primereact/togglebutton";
 import { InputTextarea } from "primereact/inputtextarea";
 import { Button } from "primereact/button";
-import { AssetsSection } from "./AssetsSection";
-import { lab } from "../types";
+import { AssetsSection } from "../components/AssetsSection";
+import { lab } from "../../types";
 import { ServerSyncContext } from "react_stream/dist/ServerSyncContext";
 
 export const Lab = ({ lab }: { lab: [number, "lab", lab] }) => {

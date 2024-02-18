@@ -1,6 +1,6 @@
 import { useContext, useState } from "react";
-import { CustomTitle } from "./CustomTitle";
-import { roadmap_collection } from "../types";
+import { CustomTitle } from "../components/CustomTitle";
+import { roadmap_collection } from "../../types";
 import { InputText } from "primereact/inputtext";
 import { InputTextarea } from "primereact/inputtextarea";
 import { Button } from "primereact/button";

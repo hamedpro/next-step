@@ -4,11 +4,11 @@ import { useNavigate } from "react-router-dom";
 import { InputTextarea } from "primereact/inputtextarea";
 import { Button } from "primereact/button";
 import { Message } from "primereact/message";
-import { NewStepModal } from "./NewStepModal";
-import { steps_to_dot } from "../helpers";
+import { NewNodeModal } from "../components/NewNodeModal";
+import { steps_to_dot } from "../../helpers";
 import Graphviz from "graphviz-react";
-import { CustomTitle } from "./CustomTitle";
-import { roadmap, step, user } from "../types";
+import { CustomTitle } from "../components/CustomTitle";
+import { roadmap, step, user } from "../../types";
 import { ServerSyncContext } from "react_stream/dist/ServerSyncContext";
 export const RoadMap = ({ roadmap_data }: { roadmap_data: [number, "roadmap", roadmap] }) => {
 	var roadmap = roadmap_data[2];
@@ -71,7 +71,7 @@ export const RoadMap = ({ roadmap_data }: { roadmap_data: [number, "roadmap", ro
 	return (
 		<>
 			<div style={{ padding: "12px", maxWidth: "768px" }}>
-				<NewStepModal
+				<NewNodeModal
 					onHide={() => {
 						set_new_step_modal({
 							active: false,

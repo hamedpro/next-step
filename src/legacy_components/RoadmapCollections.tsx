@@ -1,10 +1,10 @@
 import { Button } from "primereact/button";
-import { CustomTitle } from "./CustomTitle";
+import { CustomTitle } from "../components/CustomTitle";
 import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
-import { CustomPanel } from "./CustomPanel";
+import { CustomPanel } from "../components/CustomPanel";
 import { ServerSyncContext } from "react_stream/dist/ServerSyncContext";
-import { roadmap_collection } from "../types";
+import { roadmap_collection } from "../../types";
 
 export const RoadmapCollections = () => {
 	var { data } = useContext(ServerSyncContext);

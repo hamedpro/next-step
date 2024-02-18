@@ -4,9 +4,9 @@ import { useNavigate } from "react-router-dom";
 import { InputTextarea } from "primereact/inputtextarea";
 import { Button } from "primereact/button";
 import { Message } from "primereact/message";
-import { CustomCard } from "./CustomCard";
-import { CustomTitle } from "./CustomTitle";
-import { roadmap_collection, user } from "../types";
+import { CustomCard } from "../components/CustomCard";
+import { CustomTitle } from "../components/CustomTitle";
+import { roadmap_collection, user } from "../../types";
 import { ServerSyncContext } from "react_stream/dist/ServerSyncContext";
 export const RoadmapCollection = ({
 	roadmap_collection_data,

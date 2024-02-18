@@ -5,8 +5,8 @@ import { InputText } from "primereact/inputtext";
 import { TabMenu } from "primereact/tabmenu";
 import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { roadmap, step } from "../types";
-import { CustomTitle } from "./CustomTitle";
+import { roadmap, step } from "../../types";
+import { CustomTitle } from "../components/CustomTitle";
 import ReactMarkdown from "react-markdown";
 import { ServerSyncContext } from "react_stream/dist/ServerSyncContext";
 

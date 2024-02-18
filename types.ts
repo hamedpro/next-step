@@ -1,29 +1,20 @@
-export type lab = {
+export interface asset {
 	title: string;
-	description: string; // markdown
-	file_ids: number[];
-	parent_step_id: number;
-};
-export type resource = {
-	title: string;
-	link: string;
-};
-export type step = {
+	description: string;
+	file_id: string;
+}
+export interface node {
 	title: string;
 	description: string;
 	weight: number;
-	assets?: number[]; // file_ids
-	prerequisites: number[];
-	roadmap_id: number;
-};
-export type roadmap = {
-	title: string;
-	description: string;
-};
-export type roadmap_collection = { title: string; roadmaps: { id: number }[]; description: string };
-export type user = {
+	assets: string[]; // asset_ids
+	prerequisites: string[];
+	parent: string | undefined;
+	_id: string;
+}
+export interface user {
 	username: string;
 	password: string;
 	active_roadmap?: number;
 	active_roadmap_collection?: number;
-};
+}

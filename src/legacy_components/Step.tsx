@@ -1,15 +1,15 @@
 import { MultiSelect } from "primereact/multiselect";
 import { useContext, useEffect, useState } from "react";
-import { roadmap, step } from "../types";
+import { roadmap, step } from "../../types";
 import { Rating } from "primereact/rating";
 import { InputText } from "primereact/inputtext";
 import { Button } from "primereact/button";
 import { ToggleButton } from "primereact/togglebutton";
 import { InputTextarea } from "primereact/inputtextarea";
-import { CustomTitle } from "./CustomTitle";
-import { CustomCard } from "./CustomCard";
-import { AssetsSection } from "./AssetsSection";
-import { CustomPanel } from "./CustomPanel";
+import { CustomTitle } from "../components/CustomTitle";
+import { CustomCard } from "../components/CustomCard";
+import { AssetsSection } from "../components/AssetsSection";
+import { CustomPanel } from "../components/CustomPanel";
 import { useNavigate } from "react-router-dom";
 import { ServerSyncContext } from "react_stream/dist/ServerSyncContext";
 export const Step = ({ step_data }: { step_data: [number, "step", step] }) => {

@@ -1,9 +1,9 @@
 import { useContext } from "react";
 import { Button } from "primereact/button";
 import { useNavigate } from "react-router-dom";
-import { CustomTitle } from "./CustomTitle";
+import { CustomTitle } from "../components/CustomTitle";
 import { ServerSyncContext } from "react_stream/dist/ServerSyncContext";
-import { roadmap } from "../types";
+import { roadmap } from "../../types";
 export const RoadMaps = () => {
 	var nav = useNavigate();
 	var { data } = useContext(ServerSyncContext);

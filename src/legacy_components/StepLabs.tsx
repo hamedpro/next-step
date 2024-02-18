@@ -1,10 +1,10 @@
 import { useContext } from "react";
 import { Button } from "primereact/button";
 import { useParams } from "react-router-dom";
-import { CustomTitle } from "./CustomTitle";
+import { CustomTitle } from "../components/CustomTitle";
 import { Lab } from "./Lab";
 import { ServerSyncContext } from "react_stream/dist/ServerSyncContext";
-import { lab } from "../types";
+import { lab } from "../../types";
 export const StepLabs = () => {
 	var { data, server_post_verb } = useContext(ServerSyncContext);
 

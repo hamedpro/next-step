@@ -1,36 +1,36 @@
-import { store_standard_type } from "react_stream/dist/utils";
-import { roadmap, step } from "./types";
-export function steps_to_dot(steps_data: [number, "step", step][]) {
-	var formatted_data: { [key: string]: string[] } = {};
-	steps_data.forEach(([step_id, type, step]) => {
-		step.prerequisites.forEach((prereq) => {
-			if (formatted_data[prereq] === undefined) {
-				formatted_data[prereq] = [];
+import { WithId } from "mongodb";
+import { node } from "./types";
+export function steps_to_dot(nodes: Pick<WithId<node>, "_id" | "title" | "prerequisites">[]) {
+	//each node_id is mapped to all those nodes that depend on that
+	var formatted_data: { [node_id: string]: string[] } = {};
+
+	nodes.forEach((node) => {
+		node.prerequisites.forEach((prereq_id) => {
+			if (formatted_data[prereq_id] === undefined) {
+				formatted_data[prereq_id] = [];
 			}
-			formatted_data[prereq].push(step_id.toString());
+			formatted_data[prereq_id].push(node._id);
 		});
 	});
-	var nodes = shuffle(
-		steps_data.map(
-			([step_id, type, step]) =>
-				`"${step_id}" [id="step-${step_id}",label="${step.title}",shape=box]`
-		)
+	var graph_nodes = nodes.map(
+		(node) => `"${node._id}" [id="step-${node._id}",label="${node.title}",shape=box]`
 	);
+	shuffle(graph_nodes);
 
 	var nodes_part_1 = [];
 	var nodes_part_2 = [];
-	for (var i = 0; i < nodes.length; i++) {
+	for (var i = 0; i < graph_nodes.length; i++) {
 		if (Math.random() < 0.5) {
-			nodes_part_1.push(nodes[i]);
+			nodes_part_1.push(graph_nodes[i]);
 		} else {
-			nodes_part_2.push(nodes[i]);
+			nodes_part_2.push(graph_nodes[i]);
 		}
 	}
-	var edges = Object.keys(formatted_data).map((from: string) =>
+	var graph_edges = Object.keys(formatted_data).map((from: string) =>
 		formatted_data[from].map((to) => `"${from}" -> "${to}" [id="${from}-${to}"]`).join("\n")
 	);
 
-	var tmp = `
+	return `
 	digraph G {
 		rankdir="TB";
 		splines=true;
@@ -48,33 +48,15 @@ export function steps_to_dot(steps_data: [number, "step", step][]) {
 		nodesep=1.5;
 		${nodes_part_2.join("\n")}
 		
-		${edges.join("\n")}
+		${graph_edges.join("\n")}
 	}
 	`;
-	return tmp;
-}
-export function roadmap_to_dot(
-	data: store_standard_type,
-	roadmap_data: [number, "roadmap", roadmap]
-): string {
-	var steps = data.filter(
-		([id, type, value]) => type === "step" && value.roadmap_id === roadmap_data[0]
-	) as [number, "step", step][];
-	return steps_to_dot(steps);
 }
 export function shuffle(array: any[]) {
-	let currentIndex = array.length,
-		randomIndex;
-
-	// While there remain elements to shuffle.
-	while (currentIndex > 0) {
-		// Pick a remaining element.
-		randomIndex = Math.floor(Math.random() * currentIndex);
-		currentIndex--;
-
-		// And swap it with the current element.
-		[array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+	for (var i = array.length - 1; i > 0; i--) {
+		var j = Math.floor(Math.random() * (i + 1));
+		var temp = array[i];
+		array[i] = array[j];
+		array[j] = temp;
 	}
-
-	return array;
 }

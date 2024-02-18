@@ -1,14 +1,15 @@
 import { useContext } from "react";
-import { TopBar } from "./TopBar";
+import { TopBar } from "../components/TopBar";
 import { Panel } from "primereact/panel";
 import { Button } from "primereact/button";
 import { Link, useNavigate } from "react-router-dom";
-import { shuffle } from "../helpers";
+import { shuffle } from "../../helpers";
 import { ServerSyncContext } from "react_stream/dist/ServerSyncContext";
-import { roadmap, user } from "../types";
+import { roadmap, user } from "../../types";
 export const UserFeed = () => {
 	var { data, parsed_virtual_localstorage } = useContext(ServerSyncContext);
 	var nav = useNavigate();
+	console.log(parsed_virtual_localstorage.active_username);
 	var active_user = data.find(
 		([id, type, value]) =>
 			type === "user" && value.username === parsed_virtual_localstorage.active_username
@@ -54,11 +55,11 @@ export const UserFeed = () => {
 				<Panel header="5 Random Roadmaps">
 					<div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
 						{shuffle(
-							data.find(([id, type, value]) => type === "roadmap") as [
+							data.filter(([id, type, value]) => type === "roadmap") as [
 								number,
 								"roadmap",
 								roadmap
-							]
+							][]
 						)
 							.slice(0, 5)
 							.map(([id, type, value]) => (
