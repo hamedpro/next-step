@@ -3,30 +3,31 @@ import { useState } from "react";
 import { InputText } from "primereact/inputtext";
 import { Button } from "primereact/button";
 import { InputTextarea } from "primereact/inputtextarea";
-import { gql, useMutation } from "@apollo/client";
 import { node } from "../../types";
 import { useNavigate } from "react-router-dom";
+import { custom_axios } from "../useCollection";
 export const NewNodeModal = ({ active, onHide }: { active: boolean; onHide: () => void }) => {
 	var nav = useNavigate();
-	var [addNode, { data }] = useMutation(gql`
-		mutation add_new_query($title: String!, $description: String!) {
-			addNode(title: $title, description: $description) {
-				description
-				title
-				_id
-			}
-		}
-	`);
+
 	var [new_node, set_new_node] = useState<Pick<node, "title" | "description">>({
 		title: "",
 		description: "",
 	});
 	async function submit_new_step() {
-		var new_node_id: string = (
-			await addNode({
-				variables: { title: new_node.title, description: new_node.description },
+		var tmp: Omit<node, "id"> = {
+			...new_node,
+			weight: 1,
+			assets: [],
+			prerequisites: [],
+			parent: null,
+		};
+		var new_node_id = (
+			await custom_axios({
+				url: "/collections/nodes",
+				method: "post",
+				data: { value: tmp },
 			})
-		).data.addNode._id;
+		).data;
 		nav(`/nodes/${new_node_id}`);
 		onHide();
 	}

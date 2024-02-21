@@ -5,20 +5,14 @@ import { Button } from "primereact/button";
 import { node } from "../../types";
 import { Link } from "react-router-dom";
 import { NewNodeModal } from "./NewNodeModal";
+import { useCollection } from "../useCollection";
 
 export const Nodes = () => {
-	var { data, loading, error } = useQuery(gql`
-		query get_nodes {
-			nodes {
-				_id
-				title
-			}
-		}
-	`);
+	var { data: nodes, get_data } = useCollection<node>("nodes");
 
 	var [new_node_modal, set_new_node_modal] = useState(false);
-	if (loading) return "loading...";
-	var nodes: Pick<node, "_id" | "title">[] = data.nodes;
+
+	if (nodes === undefined) return "data not available";
 	return (
 		<>
 			<NewNodeModal
@@ -30,11 +24,12 @@ export const Nodes = () => {
 				<Button onClick={() => set_new_node_modal(true)}>New Node</Button>
 			</div>
 			{nodes.map((node) => (
-				<Fragment key={node._id}>
-					<Link to={`/nodes/${node._id}`}>{node.title}</Link>
+				<Fragment key={node.id}>
+					<Link to={`/nodes/${node.id}`}>{node.title}</Link>
 					<br />
 				</Fragment>
 			))}
+			<button onClick={() => get_data()}>refetch nodes </button>
 		</>
 	);
 };

@@ -9,7 +9,6 @@ import { roadmap, user } from "../../types";
 export const UserFeed = () => {
 	var { data, parsed_virtual_localstorage } = useContext(ServerSyncContext);
 	var nav = useNavigate();
-	console.log(parsed_virtual_localstorage.active_username);
 	var active_user = data.find(
 		([id, type, value]) =>
 			type === "user" && value.username === parsed_virtual_localstorage.active_username

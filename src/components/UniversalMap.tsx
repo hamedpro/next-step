@@ -3,23 +3,14 @@ import { steps_to_dot } from "../../helpers";
 import { node } from "../../types";
 import { useWindowSize } from "@uidotdev/usehooks";
 import { gql, useQuery } from "@apollo/client";
+import { useCollection } from "../useCollection";
 export const UniversalMap = () => {
-	var { data, loading } = useQuery(gql`
-		query get_nodes {
-			nodes {
-				title
-				prerequisites
-				_id
-			}
-		}
-	`);
+	var { data: nodes } = useCollection<node>("nodes");
 
 	var { width, height } = useWindowSize();
-	if (loading === true) {
-		return "loading...";
-	}
 
-	var nodes_to_show: Pick<node, "_id" | "prerequisites" | "title">[] = data.nodes;
+	if (nodes === undefined) return "data not available yet";
+	var nodes_to_show: node[] = nodes;
 	var dot = steps_to_dot(nodes_to_show);
 	return (
 		<div

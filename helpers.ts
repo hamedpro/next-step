@@ -1,19 +1,26 @@
 import { WithId } from "mongodb";
 import { node } from "./types";
-export function steps_to_dot(nodes: Pick<WithId<node>, "_id" | "title" | "prerequisites">[]) {
+import { SHA256 } from "crypto-js";
+import JsFileDownloader from "js-file-downloader";
+import { api_endpoint } from "./src/useCollection";
+export function steps_to_dot(nodes: node[]) {
 	//each node_id is mapped to all those nodes that depend on that
 	var formatted_data: { [node_id: string]: string[] } = {};
 
 	nodes.forEach((node) => {
+		if (!("prerequisites" in node)) {
+			console.error("prerequisites N/A for", node);
+			throw new Error();
+		}
 		node.prerequisites.forEach((prereq_id) => {
 			if (formatted_data[prereq_id] === undefined) {
 				formatted_data[prereq_id] = [];
 			}
-			formatted_data[prereq_id].push(node._id);
+			formatted_data[prereq_id].push(node.id);
 		});
 	});
 	var graph_nodes = nodes.map(
-		(node) => `"${node._id}" [id="step-${node._id}",label="${node.title}",shape=box]`
+		(node) => `"${node.id}" [id="step-${node.id}",label="${node.title}",shape=box]`
 	);
 	shuffle(graph_nodes);
 
@@ -59,4 +66,22 @@ export function shuffle(array: any[]) {
 		array[i] = array[j];
 		array[j] = temp;
 	}
+}
+export function custom_sha256_hash(input: any): string {
+	var inputString: string;
+	try {
+		inputString = JSON.stringify(input);
+	} catch (error) {
+		throw new Error("Unable to stringify input");
+	}
+	const hash = SHA256(inputString).toString();
+	return hash;
+}
+export function download_a_file(file_id: number) {
+	new JsFileDownloader({
+		url: new URL(`/files/${file_id}`, api_endpoint).href,
+		headers: [],
+		method: "GET",
+		contentType: "application/json",
+	});
 }

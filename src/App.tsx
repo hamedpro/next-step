@@ -10,10 +10,11 @@ import { NewRoadMap } from "./components/NewRoadMap";
 import { StepLabs } from "./components/StepLabs";
 import { NewRoadmapCollection } from "./components/NewRoadmapCollection";
 import { RoadmapCollections } from "./components/RoadmapCollections"; */
-import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
 import { Dashboard } from "./components/Dashboard";
+import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
 import { UniversalMap } from "./components/UniversalMap";
 import { Root } from "./components/Root";
+import { Node } from "./components/Node";
 var client = new ApolloClient({
 	cache: new InMemoryCache(),
 	uri: "http://localhost:4000",
@@ -36,6 +37,11 @@ export function App() {
 							element={<Root />}
 							path="/"
 						/>
+						<Route
+							path="/nodes/:node_id"
+							element={<Node />}
+						/>
+
 						{/*
 					<Route
 						path="/auth"

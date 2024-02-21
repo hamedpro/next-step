@@ -42,7 +42,7 @@ function random_english_word() {
 	return choose(random_english_words);
 }
 async function insert_random_node(
-	parent: string | undefined,
+	parent: string | null,
 	depth: number,
 	drop_table_first: boolean = false
 ) {
@@ -50,7 +50,7 @@ async function insert_random_node(
 
 	if (depth === 0) return;
 
-	var new_node: Omit<node, "_id"> = {
+	var new_node: Omit<node, "id"> = {
 		title: random_english_word(),
 		description: intrange(20)
 			.map((_) => random_english_word())
@@ -75,6 +75,6 @@ async function insert_random_node(
 		await insert_random_node(insertedId.toString(), depth - 1);
 	}
 }
-await insert_random_node(undefined, 3, true);
+await insert_random_node(null, 4, true);
 client.close();
-console.log(new_created_nodes_count);
+console.log(`created ${new_created_nodes_count} nodes.`);

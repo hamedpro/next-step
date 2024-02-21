@@ -7,10 +7,10 @@ export interface node {
 	title: string;
 	description: string;
 	weight: number;
-	assets: string[]; // asset_ids
+	assets: number[]; // asset_ids
 	prerequisites: string[];
-	parent: string | undefined;
-	_id: string;
+	parent: string | null;
+	id: string;
 }
 export interface user {
 	username: string;
