@@ -1,37 +1,41 @@
-import React, { useContext } from "react";
-import { useState } from "react";
-import { InputText } from "primereact/inputtext";
-import { ServerSyncContext } from "react_stream/dist/ServerSyncContext";
-import { user } from "../../types";
-import { Button } from "primereact/button";
-import { useNavigate } from "react-router";
+import React, { useContext } from "react"
+import { useState } from "react"
+import { InputText } from "primereact/inputtext"
+import { user } from "../../types"
+import { Button } from "primereact/button"
+import { useNavigate } from "react-router"
+import { custom_axios, useCollection } from "../useCollection"
 export const Auth = () => {
-	var nav = useNavigate();
-	var { data, server_post_verb, set_virtual_localstorage } = useContext(ServerSyncContext);
-	const [username, setUsername] = useState("");
-	const [password, setPassword] = useState("");
-	var user = data.find(([id, type, value]) => value.username === username && type === "user") as
-		| [number, "user", user]
-		| undefined;
+	var nav = useNavigate()
+	var { data: users } = useCollection<user>("users")
+
+	const [username, setUsername] = useState("")
+	const [password, setPassword] = useState("")
+	var user = users?.find((user) => user.username === username)
 	function login() {
 		if (!user) {
-			throw new Error("User not found");
+			throw new Error("User not found")
 		}
-		if (user[2].password !== password) {
-			alert("password incorrect");
+		if (user.password !== password) {
+			alert("password incorrect")
 		} else {
-			set_virtual_localstorage(JSON.stringify({ active_username: user[2].username }));
-			nav("/");
+			localStorage.setItem("username", username)
+			nav("/dashboard")
 		}
 	}
-	function register() {
-		server_post_verb((prev, max_existing_id) => {
-			var new_user: user = { username, password };
-			prev.push([max_existing_id + 1, "user", new_user]);
-		});
-		set_virtual_localstorage(JSON.stringify({ active_username: username }));
-		nav("/");
+	async function register() {
+		var new_user: Omit<user, "id"> = { username, password, skill_set: [] }
+
+		await custom_axios({
+			url: "/collections/users",
+			method: "post",
+			data: { value: new_user },
+		})
+		localStorage.setItem("username", username)
+		nav("/dashboard")
 	}
+
+	if (users === undefined) return "i dont have users yet."
 	return (
 		<div>
 			<h1>Auth</h1>
@@ -56,5 +60,5 @@ export const Auth = () => {
 				<Button onClick={register}>Register</Button>
 			)}
 		</div>
-	);
-};
+	)
+}
