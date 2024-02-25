@@ -4,21 +4,20 @@ import { node } from "../../types";
 import { useWindowSize } from "@uidotdev/usehooks";
 import { gql, useQuery } from "@apollo/client";
 import { useCollection } from "../useCollection";
+import { useMemo } from "react";
 export const UniversalMap = () => {
 	var { data: nodes } = useCollection<node>("nodes");
 
 	var { width, height } = useWindowSize();
 
-	if (nodes === undefined) return "data not available yet";
-	var nodes_to_show: node[] = nodes;
-	var dot = steps_to_dot(nodes_to_show);
+	var dot = useMemo(() => steps_to_dot(nodes || []), [JSON.stringify(nodes)]);
 	return (
 		<div
 			style={{
-				height: "100vh",
-				width: "100vw",
+				height: "100%",
+				width: "100%",
 				/* backgroundColor: "white", */
-				position: "fixed",
+				overflow: "hidden",
 			}}
 			className="bg-neutral-900"
 		>
@@ -28,8 +27,8 @@ export const UniversalMap = () => {
 				options={{
 					useWorker: false,
 					zoom: true,
-					height: height || window.innerHeight,
-					width: width || window.innerWidth,
+
+					width: ((width || window.innerWidth) * 90) / 100,
 				}}
 			/>
 		</div>

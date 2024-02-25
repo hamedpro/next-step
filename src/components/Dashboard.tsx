@@ -1,22 +1,41 @@
-import { Link } from "react-router-dom"
-import { Nodes } from "./Nodes"
-import { Panel } from "primereact/panel"
-import { CharacterStatus } from "./CharacterStatus"
-import { CustomPanel } from "./CustomPanel"
+import { Nodes } from "./Nodes";
+import { CharacterStatus } from "./CharacterStatus";
+import { UniversalMap } from "./UniversalMap";
 
 export const Dashboard = () => {
 	return (
 		<>
-			<h1>Dashboard</h1>
-			<Link to="/universal_map">Universal Map</Link>
-			<Nodes />
-			<hr />
-			<h1>Now</h1>
 			<div
-				style={{ border: "1px solid whitw", width: "90%", margin: "20px", padding: "20px" }}
+				style={{
+					padding: "12px",
+					width: "100%",
+					display: "flex",
+					flexDirection: "column",
+					alignItems: "center",
+				}}
 			>
-				<CharacterStatus />
+				<div style={{ width: "90%" }}>
+					{[
+						["UniversalMap", <UniversalMap />],
+						["Now", <CharacterStatus />],
+						["Nodes", <Nodes />],
+					].map(([title, element]) => (
+						<>
+							<h1>{title}</h1>
+							<div
+								style={{
+									border: "1px solid white",
+									borderRadius: "10px",
+									padding: "20px",
+									marginBottom: "40px",
+								}}
+							>
+								{element}
+							</div>
+						</>
+					))}
+				</div>
 			</div>
 		</>
-	)
-}
+	);
+};
