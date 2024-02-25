@@ -12,7 +12,11 @@ export const Dashboard = () => {
 			<Nodes />
 			<hr />
 			<h1>Now</h1>
-			<CharacterStatus />
+			<div
+				style={{ border: "1px solid whitw", width: "90%", margin: "20px", padding: "20px" }}
+			>
+				<CharacterStatus />
+			</div>
 		</>
 	)
 }

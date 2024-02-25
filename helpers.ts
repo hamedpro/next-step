@@ -85,3 +85,15 @@ export function download_a_file(file_id: number) {
 		contentType: "application/json",
 	});
 }
+
+/**
+ * just like python3 range func :
+ * start is inclusive but stop is exclusive
+ * */
+export function range(start: number, stop: number) {
+	const numbers: number[] = [];
+	for (let i = start; i < stop; i++) {
+		numbers.push(i);
+	}
+	return numbers;
+}

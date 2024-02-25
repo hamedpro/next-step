@@ -1,41 +1,43 @@
-import React, { useContext } from "react"
-import { useState } from "react"
-import { InputText } from "primereact/inputtext"
-import { user } from "../../types"
-import { Button } from "primereact/button"
-import { useNavigate } from "react-router"
-import { custom_axios, useCollection } from "../useCollection"
+import React, { useContext } from "react";
+import { useState } from "react";
+import { InputText } from "primereact/inputtext";
+import { user } from "../../types";
+import { Button } from "primereact/button";
+import { useNavigate } from "react-router";
+import { custom_axios, useCollection } from "../useCollection";
 export const Auth = () => {
-	var nav = useNavigate()
-	var { data: users } = useCollection<user>("users")
+	var nav = useNavigate();
+	var { data: users } = useCollection<user>("users");
 
-	const [username, setUsername] = useState("")
-	const [password, setPassword] = useState("")
-	var user = users?.find((user) => user.username === username)
+	const [username, setUsername] = useState("");
+	const [password, setPassword] = useState("");
+	var user = users?.find((user) => user.username === username);
 	function login() {
 		if (!user) {
-			throw new Error("User not found")
+			throw new Error("User not found");
 		}
 		if (user.password !== password) {
-			alert("password incorrect")
+			alert("password incorrect");
 		} else {
-			localStorage.setItem("username", username)
-			nav("/dashboard")
+			localStorage.setItem("user_id", user.id);
+			nav("/dashboard");
 		}
 	}
 	async function register() {
-		var new_user: Omit<user, "id"> = { username, password, skill_set: [] }
+		var new_user: Omit<user, "id"> = { username, password, skill_set: [] };
 
-		await custom_axios({
-			url: "/collections/users",
-			method: "post",
-			data: { value: new_user },
-		})
-		localStorage.setItem("username", username)
-		nav("/dashboard")
+		var new_user_id: string = (
+			await custom_axios({
+				url: "/collections/users",
+				method: "post",
+				data: { value: new_user },
+			})
+		).data;
+		localStorage.setItem("user_id", new_user_id);
+		nav("/dashboard");
 	}
 
-	if (users === undefined) return "i dont have users yet."
+	if (users === undefined) return "i dont have users yet.";
 	return (
 		<div>
 			<h1>Auth</h1>
@@ -60,5 +62,5 @@ export const Auth = () => {
 				<Button onClick={register}>Register</Button>
 			)}
 		</div>
-	)
-}
+	);
+};
