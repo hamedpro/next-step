@@ -27,7 +27,13 @@ body {
 body {
 	margin: 0px;
 }
-
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+#dashboard-mic-icon-container {
+	background-color: white;
+	color: #292727;
+	cursor: pointer;
+}
+#dashboard-mic-icon-container:hover {
+	background-color: #292727;
+	color: white;
+	border: 1px solid aqua;
+}
