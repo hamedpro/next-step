@@ -24,7 +24,7 @@ export const Auth = () => {
 		}
 	}
 	async function register() {
-		var new_user: Omit<user, "id"> = { username, password, skill_set: [] };
+		var new_user: Omit<user, "id"> = { username, password, exam_records: [] };
 
 		var new_user_id: string = (
 			await custom_axios({

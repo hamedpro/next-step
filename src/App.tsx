@@ -16,6 +16,9 @@ import { UniversalMap } from "./components/UniversalMap";
 import { Root } from "./components/Root";
 import { Node } from "./components/Node";
 import { Auth } from "./components/Auth";
+import { Goal } from "./components/Goal";
+import { GoalChoosing } from "./components/GoalChoosing";
+import { GoalTimingSettings } from "./components/GoalTimingSettings";
 
 export function App() {
 	return (
@@ -42,33 +45,18 @@ export function App() {
 						path="/auth"
 						element={<Auth />}
 					/>
-					{/*
-				
 					<Route
-						element={<RoadMaps />}
-						path="/roadmaps"
+						path="/goal"
+						element={<Goal />}
 					/>
 					<Route
-						element={<ThingRoute />}
-						path="/:thing_id"
+						path="/goal/choosing"
+						element={<GoalChoosing />}
 					/>
 					<Route
-						element={<NewRoadMap />}
-						path="/roadmaps/new"
+						path="/goal/timing"
+						element={<GoalTimingSettings />}
 					/>
-
-					<Route
-						element={<StepLabs />}
-						path="/:thing_id/labs"
-					/>
-					<Route
-						element={<NewRoadmapCollection />}
-						path="/roadmap_collections/new"
-					/>
-					<Route
-						element={<RoadmapCollections />}
-						path="/roadmap_collections"
-					/> */}
 				</Routes>
 			</BrowserRouter>
 		</>

@@ -13,9 +13,12 @@ import { CustomPanel } from "../components/CustomPanel";
 import { useNavigate, useParams } from "react-router-dom";
 import { gql } from "@apollo/client";
 import { custom_axios, useCollection } from "../useCollection";
+import { avg } from "../../helpers";
+import { DataTable } from "primereact/datatable";
+import { Column } from "primereact/column";
 export const Node = () => {
-	var { data: nodes, get_data } = useCollection<node>("nodes");
-	var { data: users, get_data } = useCollection<user>("users");
+	var { data: nodes, get_data: refresh_nodes } = useCollection<node>("nodes");
+	var { data: users, get_data: refresh_users } = useCollection<user>("users");
 
 	var { node_id } = useParams();
 	var nav = useNavigate();
@@ -46,12 +49,9 @@ export const Node = () => {
 			method: "put",
 			data: new_node,
 		});
-		await get_data();
+		await refresh_nodes();
 	}
 
-	async function toggle_done_mark() {
-		alert("Under development");
-	}
 	return (
 		<div style={{ padding: "12px" }}>
 			<div style={{ display: "flex", justifyContent: "space-between" }}>
@@ -128,54 +128,66 @@ export const Node = () => {
 			<p>your skill level:</p>
 			<Rating
 				style={{ marginBottom: "20px" }}
-				value={user.skill_set.find((item) => item[0] === node_id)?.[1] || 0}
-				onChange={async (e) => {
-					var new_skill_set = [
-						...user!.skill_set.filter((item) => item[0] !== node_id),
-						[node_id, e.value || 0],
-					];
-					var url = `/collections/users/${user?.id}`;
-					console.log(url);
-					await custom_axios({
-						url,
-						method: "put",
-						data: { skill_set: new_skill_set },
-					});
-					get_data();
-				}}
+				value={
+					user.exam_records.length === 0
+						? 0
+						: avg(user.exam_records.map((record) => record.score))
+				}
+				disabled={true}
+				cancel={false}
 			/>
-			{/* <CustomPanel
-				bootstrap_icon="bi-list-check"
-				panel_title="Progress Tracker"
-				icon_title="Track Your Progress Visually"
-			>
-				<div
-					style={{
-						display: "flex",
-						flexDirection: "column",
-						rowGap: "12px",
+
+			<hr />
+			<div style={{ display: "flex", justifyContent: "space-between" }}>
+				<p>your exam records: </p>
+				<Button
+					onClick={() => {
+						custom_axios({
+							url: `/collections/users/${localStorage.getItem("user_id")}`,
+							method: "put",
+							data: {
+								...user!,
+								exam_records: [
+									...user!.exam_records,
+									{
+										node_id: node_id!,
+										score: Number(window.prompt("enter your score")),
+										time: new Date().getTime(),
+									},
+								],
+							},
+						})
+							.then(
+								(response) => {
+									alert("done");
+								},
+								(error) => {
+									alert("something went wrong");
+								}
+							)
+							.then(() => refresh_users());
 					}}
 				>
-					<p>
-						Mark steps you have done so we can show you your progress drawn as charts
-						and heatmaps. you will not miss where you left anymore!
-					</p>
-					<b>
-						{done_steps.includes(step_data[0])
-							? `You have done this step before`
-							: `You haven't marked this step as done`}
-					</b>
-					<ToggleButton
-						onChange={toggle_done_mark}
-						style={{ width: "fit-content" }}
-						checked={done_steps.includes(step_data[0])}
-						offIcon={"Mark As Done"}
-						onLabel="Mark As Unread"
-					/>
-				</div>
-			</CustomPanel>
-			<hr />
-			*/}
+					new +
+				</Button>
+			</div>
+			<DataTable value={user!.exam_records.map((i, index) => ({ ...i, id: index }))}>
+				<Column field="id" />
+				<Column field="node_id" />
+				<Column field="score" />
+				<Column field="time" />
+			</DataTable>
+			<Rating
+				style={{ marginBottom: "20px" }}
+				value={
+					user.exam_records.length === 0
+						? 0
+						: avg(user.exam_records.map((record) => record.score))
+				}
+				disabled={true}
+				cancel={false}
+			/>
+
 			<AssetsSection
 				change_mode={change_mode}
 				tar_archive_name={"assets-of-" + new_node.title + ".tar"}

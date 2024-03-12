@@ -97,3 +97,5 @@ export function range(start: number, stop: number) {
 	}
 	return numbers;
 }
+export const sum = (array: number[]) => array.reduce((a, b) => a + b, 0);
+export const avg = (array: number[]) => sum(array) / array.length;

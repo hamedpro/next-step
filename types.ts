@@ -21,4 +21,9 @@ export interface user {
 		time: number /* new Date().getTime() */;
 	}[];
 	id: string;
+	goal_timing_mode?:
+		| [type: "dynamic", steps_each_day: number]
+		| [type: "static", finish_timestamp: ReturnType<(typeof Date)["now"]>]
+		| null;
+	goal?: [node_id: string, skill_level: number /* out of 5 */][] | null;
 }
