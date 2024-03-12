@@ -1,5 +1,5 @@
 import { WithId } from "mongodb";
-import { node } from "./types";
+import { node, user } from "./types";
 import { SHA256 } from "crypto-js";
 import JsFileDownloader from "js-file-downloader";
 import { api_endpoint } from "./src/useCollection";
@@ -99,3 +99,23 @@ export function range(start: number, stop: number) {
 }
 export const sum = (array: number[]) => array.reduce((a, b) => a + b, 0);
 export const avg = (array: number[]) => sum(array) / array.length;
+
+export function calc_user_skill_level(user: user, node_id: string) {
+	var related_exam_records = user.exam_records.filter((rec) => rec.node_id === node_id);
+	if (related_exam_records.length === 0) return 0;
+
+	return Math.round(avg(related_exam_records.map((rec) => rec.score)) / 5);
+}
+export function getTimestampsForNDays(n: number): number[] {
+	const timestamps: number[] = [];
+	const today = new Date();
+	today.setHours(0, 0, 0, 0); // Set time to the start of the day
+
+	for (let i = 0; i < n; i++) {
+		const nextDay = new Date(today);
+		nextDay.setDate(nextDay.getDate() + i);
+		timestamps.push(nextDay.getTime());
+	}
+
+	return timestamps;
+}

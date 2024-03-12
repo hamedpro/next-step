@@ -23,7 +23,8 @@ export interface user {
 	id: string;
 	goal_timing_mode?:
 		| [type: "dynamic", steps_each_day: number]
-		| [type: "static", finish_timestamp: ReturnType<(typeof Date)["now"]>]
+		| [type: "static", last_day: number /* timestamp of start of the last day */]
 		| null;
 	goal?: [node_id: string, skill_level: number /* out of 5 */][] | null;
 }
+export type step = [node_id: string, current_skill_level: number, goal_skill_level: number];

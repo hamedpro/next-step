@@ -35,10 +35,10 @@ export const GoalTimingSettings = () => {
 					if (e.value === false) {
 						update_goal_timing_mode(null);
 					} else {
-						update_goal_timing_mode([
-							"static",
-							new Date().getTime() + 1000 * 3600 * 24 * 10,
-						]);
+						var last_day = new Date();
+						last_day.setHours(0, 0, 0, 0);
+						last_day.setDate(last_day.getDate() + 10);
+						update_goal_timing_mode(["static", last_day.getTime()]);
 					}
 				}}
 			/>
