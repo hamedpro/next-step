@@ -1,6 +1,6 @@
 import { MongoClient } from "mongodb";
 import { node } from "./types";
-import { shuffle } from "./helpers";
+import { generateRandomString, shuffle } from "./helpers";
 import { readFileSync } from "fs";
 
 var client = new MongoClient("mongodb://127.0.0.1:27017");
@@ -15,13 +15,7 @@ export function choose<T>(choices: T[]): T {
 	shuffle(clone);
 	return clone[0];
 }
-export function generateRandomString(length: number): string {
-	const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-	return Array.from(
-		{ length },
-		() => characters[Math.floor(Math.random() * characters.length)]
-	).join("");
-}
+
 export function intrange(n: number): number[] {
 	var range: number[] = [];
 	for (var i = 1; i <= n; i++) {

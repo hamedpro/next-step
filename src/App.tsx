@@ -6,11 +6,13 @@ import { Dashboard } from "./components/Dashboard";
 import { UniversalMap } from "./components/UniversalMap";
 import { Root } from "./components/Root";
 import { Node } from "./components/Node";
-import { Auth } from "./components/Auth";
 import { Goal } from "./components/Goal";
 import { GoalChoosing } from "./components/GoalChoosing";
 import { GoalTimingSettings } from "./components/GoalTimingSettings";
 import { Calendar } from "./components/Calendar";
+import { PhoneNumberInputPage } from "./components/PhoneNumberInputPage";
+import VerificationCodeInput from "./components/VerificationCodeInput";
+import { VerificationCodeInputPage } from "./components/VerificationCodeInputPage";
 
 export function App() {
 	return (
@@ -33,9 +35,14 @@ export function App() {
 					element={<Node />}
 				/>
 				<Route
-					path="/auth"
-					element={<Auth />}
+					path="/auth/phone_number_input"
+					element={<PhoneNumberInputPage />}
 				/>
+				<Route
+					path="/auth/verification_code_input"
+					element={<VerificationCodeInputPage />}
+				/>
+
 				<Route
 					path="/goal"
 					element={<Goal />}

@@ -119,3 +119,63 @@ export function getTimestampsForNDays(n: number): number[] {
 
 	return timestamps;
 }
+export function insertSpaces(str: string, n: number): string {
+	// Handle empty string or n <= 0 cases
+	if (str.length === 0 || n <= 0) {
+		return str;
+	}
+
+	const result = [];
+	for (let i = 0; i < str.length; i += n) {
+		result.push(str.slice(i, Math.min(i + n, str.length)));
+	}
+
+	return result.join(" ");
+}
+
+export function insertSpacesAtIndices(text: string, indices: number[]): string {
+	// Handle empty text or invalid indices
+	if (!text || !indices || !indices.length) {
+		return text;
+	}
+
+	const sortedIndices = indices.sort((a, b) => a - b); // Remove duplicates and sort indices
+	const result: string[] = [];
+	let start = 0;
+
+	for (const index of sortedIndices) {
+		// Ensure index is within the text's length
+		if (index < 0 || index >= text.length) {
+			continue;
+		}
+
+		result.push(text.slice(start, index));
+		result.push(" ");
+		start = index;
+	}
+
+	// Append the remaining part of the text
+	result.push(text.slice(start));
+
+	return result.join("");
+}
+export function generateRandomString(length: number): string {
+	const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+	return Array.from(
+		{ length },
+		() => characters[Math.floor(Math.random() * characters.length)]
+	).join("");
+}
+export function generate_random_string_only_numbers(n: number): string {
+	// Character pool containing only digits
+	const charPool = "0123456789";
+
+	// Use Math.random() to generate random indexes within the character pool
+	var randomString = "";
+	for (let i = 0; i < n; i++) {
+		const randomIndex = Math.floor(Math.random() * charPool.length);
+		randomString += charPool.charAt(randomIndex);
+	}
+
+	return randomString;
+}

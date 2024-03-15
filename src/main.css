@@ -1,7 +1,17 @@
+html {
+	height: 100%;
+	width: 100%;
+}
 body {
 	/* for prime react */
 	font-family: var(--font-family);
 	margin: 0px;
+	height: 100%;
+	width: 100%;
+}
+#root {
+	height: 100%;
+	width: 100%;
 }
 #dashboard-mic-icon-container {
 	background-color: white;
@@ -12,4 +22,16 @@ body {
 	background-color: #292727;
 	color: white;
 	border: 1px solid aqua;
+}
+:root {
+	--color1_primary: #3d3b40;
+	--color1_secondary: #f8edff;
+	--color2_primary: #525ceb;
+	--color2_secondary: #bfcfe7;
+}
+.verification_code_input {
+	display: flex;
+	height: 48px;
+	width: 48px;
+	border-radius: 5px;
 }
