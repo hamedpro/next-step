@@ -1,5 +1,6 @@
 import "primereact/resources/themes/lara-light-indigo/theme.css";
 import "primereact/resources/primereact.min.css";
+import "primeicons/primeicons.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Dashboard } from "./components/Dashboard";
@@ -13,6 +14,7 @@ import { Calendar } from "./components/Calendar";
 import { PhoneNumberInputPage } from "./components/PhoneNumberInputPage";
 import VerificationCodeInput from "./components/VerificationCodeInput";
 import { VerificationCodeInputPage } from "./components/VerificationCodeInputPage";
+import { ProfileInit } from "./components/ProfileInit";
 
 export function App() {
 	return (
@@ -42,7 +44,10 @@ export function App() {
 					path="/auth/verification_code_input"
 					element={<VerificationCodeInputPage />}
 				/>
-
+				<Route
+					path="/auth/profile_init"
+					element={<ProfileInit />}
+				/>
 				<Route
 					path="/goal"
 					element={<Goal />}

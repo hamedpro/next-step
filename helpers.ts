@@ -159,12 +159,17 @@ export function insertSpacesAtIndices(text: string, indices: number[]): string {
 
 	return result.join("");
 }
-export function generateRandomString(length: number): string {
+export function generateRandomString(length: number, not_allowed?: string[]): string {
 	const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-	return Array.from(
+	var output = Array.from(
 		{ length },
 		() => characters[Math.floor(Math.random() * characters.length)]
 	).join("");
+	if (not_allowed !== undefined && not_allowed.includes(output)) {
+		return generateRandomString(length, not_allowed);
+	} else {
+		return output;
+	}
 }
 export function generate_random_string_only_numbers(n: number): string {
 	// Character pool containing only digits

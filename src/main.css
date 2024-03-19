@@ -35,3 +35,11 @@ body {
 	width: 48px;
 	border-radius: 5px;
 }
+@keyframes custom_blur_animation {
+	from {
+		filter: blur("16px");
+	}
+	to {
+		filter: blur("32px");
+	}
+}

@@ -38,6 +38,7 @@
     "nodemon": "^3.0.1",
     "plotly.js": "^2.29.1",
     "postcss": "^8.4.33",
+    "primeicons": "^6.0.1",
     "primereact": "^9.6.2",
     "react": "^18.2.0",
     "react-chartjs-2": "^5.2.0",

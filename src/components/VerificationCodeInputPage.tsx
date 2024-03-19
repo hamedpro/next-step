@@ -6,6 +6,7 @@ import VerificationCodeInput from "./VerificationCodeInput";
 import { Toast } from "primereact/toast";
 import { custom_axios, useCollection } from "../useCollection";
 import { user } from "../../types";
+import { generateRandomString } from "../../helpers";
 
 export const VerificationCodeInputPage = () => {
 	var nav = useNavigate();
@@ -21,12 +22,17 @@ export const VerificationCodeInputPage = () => {
 		//if user is not registered => create user
 		//finally => login
 
-		var user = users!.find((user) => user);
+		var user = users!.find((user) => user.phone_number === phone_number);
 		if (user === undefined) {
 			//register user
 			var new_user: Omit<user, "id"> = {
 				phone_number: phone_number!,
 				exam_records: [],
+				username: generateRandomString(
+					6,
+					users!.map((user) => user.username)
+				),
+				biography: "",
 			};
 			try {
 				var response = await custom_axios({
@@ -34,7 +40,7 @@ export const VerificationCodeInputPage = () => {
 					method: "post",
 					data: new_user,
 				});
-				var new_user_id: string = response.data.insertedId;
+				var new_user_id: string = response.data.inserted_id;
 				localStorage.setItem("user_id", new_user_id);
 				nav("/auth/profile_init");
 			} catch (error) {

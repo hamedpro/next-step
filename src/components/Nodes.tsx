@@ -1,33 +1,25 @@
-import { gql, useQuery } from "@apollo/client";
-import React, { Fragment, useState } from "react";
-import { CustomTitle } from "./CustomTitle";
-import { Button } from "primereact/button";
-import { node } from "../../types";
-import { Link } from "react-router-dom";
-import { NewNodeModal } from "./NewNodeModal";
-import { useCollection } from "../useCollection";
+import {
+	Chart as ChartJS,
+	RadialLinearScale,
+	PointElement,
+	LineElement,
+	Filler,
+	Tooltip,
+	Legend,
+} from "chart.js";
+import { CustomMenu } from "./CustomMenu";
+import { useCharacterStatus } from "../useCharacterStatus";
+ChartJS.register(RadialLinearScale, PointElement, LineElement, Filler, Tooltip, Legend);
 
-export const Nodes = () => {
-	var { data: nodes, get_data } = useCollection<node>("nodes");
-
-	var [new_node_modal, set_new_node_modal] = useState(false);
-
-	if (nodes === undefined) return "data not available";
+export const Dashboard = () => {
+	var status = useCharacterStatus();
+	if (typeof status === "string") return status;
+	var { children, set_current_parent_id, current_parent_node, user } = status;
 	return (
-		<>
-			<NewNodeModal
-				onHide={() => set_new_node_modal(false)}
-				active={new_node_modal}
-			/>
-			<div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-				<Button onClick={() => set_new_node_modal(true)}>New Node</Button>
-			</div>
-			{nodes.map((node) => (
-				<Fragment key={node.id}>
-					<Link to={`/nodes/${node.id}`}>{node.title}</Link>
-					<br />
-				</Fragment>
-			))}
-		</>
+		<CustomMenu
+			children={children}
+			set_current_parent_id={set_current_parent_id}
+			current_parent_node={current_parent_node}
+		/>
 	);
 };
