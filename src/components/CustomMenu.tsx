@@ -11,10 +11,12 @@ import {
 import { Dispatch, SetStateAction } from "react";
 import { CustomTitle } from "./CustomTitle";
 import { Button } from "primereact/button";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useCollection } from "../useCollection";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
+import { truncateWithEllipsis } from "../../helpers";
+import { LineChartWithAreaFill } from "./LineChartWithAreaFill";
 ChartJS.register(RadialLinearScale, PointElement, LineElement, Filler, Tooltip, Legend);
 
 export function CustomMenu({
@@ -32,7 +34,12 @@ export function CustomMenu({
 	var user = users.find((user) => user.id === localStorage.getItem("user_id"));
 	if (user === undefined) return "could not find your user data";
 	return (
-		<div style={{ display: "flex", flexDirection: "column" }}>
+		<div
+			style={{
+				display: "flex",
+				flexDirection: "column",
+			}}
+		>
 			<CustomTitle
 				back_onclick={() => {
 					if (current_parent_node === undefined) {
@@ -43,63 +50,94 @@ export function CustomMenu({
 					}
 				}}
 				text={current_parent_node?.title || "Root"}
+				style={{ padding: "24px 0px" }}
 			/>
-			{children.map((node) => (
-				<div
-					style={{
-						marginBottom: "10px",
-						width: "50%",
-						borderRadius: "12px",
-						aspectRatio: "1",
-						position: "relative",
-						border: "1px solid white",
-						padding: "10px",
-						cursor: "pointer",
-					}}
-					key={node.id}
-					onClick={() => {
-						set_current_parent_id(node.id);
-					}}
-				>
-					<Button
-						onClick={(e) => {
-							e.stopPropagation();
-							nav(`/nodes/${node.id}`);
-						}}
+			<div
+				style={{
+					flexWrap: "wrap",
+					borderRadius: "8px",
+					display: "flex",
+					width: "100%",
+					justifyContent: "space-between",
+					rowGap: "12px",
+					color: "var(--color1_primary)",
+				}}
+			>
+				{children.map((node) => (
+					<div
 						style={{
-							position: "absolute",
-							height: "30px",
-							width: "30px",
-							borderRadius: "100%",
-							background: "blue",
-							color: "white",
-							top: "10px",
-							right: "10px",
-							display: "flex",
-							justifyContent: "center",
-							alignItems: "center",
+							marginBottom: "10px",
+							width: "50%",
+							borderRadius: "12px",
+							aspectRatio: "1",
+							position: "relative",
+							background: "var(--color2_secondary)",
+							padding: "16px",
+
+							cursor: "pointer",
+							...{
+								flex: "0 0 calc(50% - 12px)",
+								textAlign: "start",
+								display: "flex",
+								flexDirection: "column",
+								alignItems: "start",
+							},
+						}}
+						key={node.id}
+						onClick={() => {
+							set_current_parent_id(node.id);
 						}}
 					>
-						<i className="bi bi-arrow-up-right-circle-fill" />
-					</Button>
-					<h1>{node.title}</h1>
+						<div
+							style={{
+								display: "flex",
+								justifyContent: "space-between",
+								width: "100%",
+								alignItems: "center",
+							}}
+						>
+							<h1 style={{ margin: "0px" }}>{node.title}</h1>
 
-					<p>{node.description}</p>
-					<DataTable
-						value={user!.exam_records.map((i, index) => {
-							var tmp = { ...i, id: index };
-							console.log(user!.exam_records);
-							//console.log(tmp);
-							return tmp;
-						})}
-					>
-						<Column field="id" />
-						<Column field="node_id" />
-						<Column field="score" />
-						<Column field="time" />
-					</DataTable>
-				</div>
-			))}
+							<Button
+								rounded
+								text
+								aria-label="Filter"
+								onClick={(e) => {
+									e.stopPropagation();
+									nav(`/nodes/${node.id}`);
+								}}
+								style={{
+									height: "40px",
+									width: "40px",
+									borderRadius: "100%",
+									background: "lightblue",
+									fontSize: "35px",
+
+									display: "flex",
+									justifyContent: "center",
+									alignItems: "center",
+								}}
+								icon="bi bi-arrow-up-right-circle-fill"
+							/>
+						</div>
+
+						<p
+							style={{
+								margin: "24px 0px",
+								overflowY: "scroll",
+								textOverflow: "ellipsis",
+							}}
+						>
+							{truncateWithEllipsis(node.description, 150)}
+						</p>
+						<LineChartWithAreaFill
+							data={user!.exam_records
+								.sort((e1, e2) => e2.time - e1.time)
+								.map((i, index) => i.score)}
+						/>
+					</div>
+				))}
+			</div>
 		</div>
 	);
 }

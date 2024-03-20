@@ -10,12 +10,11 @@ import {
 } from "chart.js";
 import { useState } from "react";
 import { Button } from "primereact/button";
-import { InputTextarea } from "primereact/inputtextarea";
 import { useRecording } from "../useRecording";
-import { useCharacterStatus } from "../useCharacterStatus";
 ChartJS.register(RadialLinearScale, PointElement, LineElement, Filler, Tooltip, Legend);
 import wallpaper from "/Users/hamedpro/wallpapers/blue_abstract_4.jpg";
 import { InputText } from "primereact/inputtext";
+import { BlurWallpaper } from "./BlurWallpaper";
 export function Dashboard() {
 	var [messages, set_messages] = useState<["user" | "model", string][]>([]);
 	function submit_prompt_to_text_generative_model() {
@@ -59,16 +58,7 @@ export function Dashboard() {
 	var [prompt_input, set_prompt_input] = useState("");
 	return (
 		<>
-			<div
-				style={{
-					background: `url(${wallpaper})`,
-					width: "100vw",
-					height: "100vh",
-					zIndex: -1,
-					position: "fixed",
-					filter: "blur(32px)",
-				}}
-			></div>
+			<BlurWallpaper wallpaper={wallpaper} />
 			<div
 				style={{
 					padding: "32px",
@@ -128,9 +118,7 @@ export function Dashboard() {
 							flexWrap: "wrap",
 							borderRadius: "8px",
 							display: "flex",
-
 							width: "100%",
-
 							justifyContent: "space-between",
 							rowGap: "12px",
 						}}
@@ -146,7 +134,7 @@ export function Dashboard() {
 						].map((item) => (
 							<Button
 								style={{
-									flex: "0 0 calc(50% - 12px )",
+									flex: "0 0 calc(50% - 12px)",
 									textAlign: "start",
 									display: "flex",
 									flexDirection: "column",

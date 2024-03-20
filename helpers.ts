@@ -184,3 +184,10 @@ export function generate_random_string_only_numbers(n: number): string {
 
 	return randomString;
 }
+export function truncateWithEllipsis(text: string, maxLength: number): string {
+	if (text.length > maxLength) {
+		return text.slice(0, maxLength - 3) + "..."; // Truncate and add ellipsis
+	} else {
+		return text; // Return original string if not too long
+	}
+}

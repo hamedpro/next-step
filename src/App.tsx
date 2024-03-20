@@ -15,6 +15,7 @@ import { PhoneNumberInputPage } from "./components/PhoneNumberInputPage";
 import VerificationCodeInput from "./components/VerificationCodeInput";
 import { VerificationCodeInputPage } from "./components/VerificationCodeInputPage";
 import { ProfileInit } from "./components/ProfileInit";
+import { Nodes } from "./components/Nodes";
 
 export function App() {
 	return (
@@ -35,6 +36,10 @@ export function App() {
 				<Route
 					path="/nodes/:node_id"
 					element={<Node />}
+				/>
+				<Route
+					path="/nodes"
+					element={<Nodes />}
 				/>
 				<Route
 					path="/auth/phone_number_input"
