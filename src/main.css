@@ -43,3 +43,13 @@ body {
 		filter: blur("32px");
 	}
 }
+
+/* #node .p-rating {
+	width: 200px;
+} */
+
+#node .p-rating-star,
+#node .p-rating-icon {
+	width: 40px;
+	height: 40px;
+}

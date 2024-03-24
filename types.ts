@@ -1,13 +1,13 @@
 export interface asset {
 	title: string;
-	description: string;
-	file_id: string;
+	description?: string;
+	file_id: number;
 }
 export interface node {
 	title: string;
 	description: string;
 	weight: number;
-	assets: number[]; // asset_ids
+	assets: asset[];
 	prerequisites: string[];
 	parent: string | null;
 	id: string;

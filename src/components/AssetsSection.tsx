@@ -1,16 +1,18 @@
 import { Button } from "primereact/button";
 import { FileUpload, FileUploadHandlerEvent } from "primereact/fileupload";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { custom_axios } from "../useCollection";
-import { download_a_file } from "../../helpers";
+import { download_a_file, download_assets_az_zip } from "../../helpers";
 
 export const AssetsSection = ({
 	file_ids,
+	file_names,
 	tar_archive_name = "download.tar",
 	onDelete,
 	onUpload,
 	change_mode,
 }: {
+	file_names: string[];
 	file_ids: number[];
 	tar_archive_name: string;
 	onDelete: (file_id: number) => void;
@@ -26,14 +28,14 @@ export const AssetsSection = ({
 		}
 		var file = e.files[0];
 		form.append("file", file);
-		var { new_file_id } = (
+		var { asset_id } = (
 			await custom_axios({
 				data: form,
 				url: "/files",
 				method: "post",
 			})
 		).data;
-		onUpload(new_file_id as number);
+		onUpload(asset_id as number);
 		e.options.clear();
 	}
 	return (
@@ -45,12 +47,13 @@ export const AssetsSection = ({
 					alignItems: "center",
 				}}
 			>
-				<h4>Assets: </h4>
+				<h3>Assets: </h3>
 				<div style={{ display: "flex", alignItems: "center", columnGap: "10px" }}>
-					<Button
-						icon="bi bi-cloud-download pr-2"
-						onClick={() => alert("this feature is under development")}
-					>
+					<Button onClick={() => download_assets_az_zip(file_ids)}>
+						<i
+							className="bi bi-cloud-download"
+							style={{ marginRight: "6px" }}
+						/>{" "}
 						Tar Archive
 					</Button>
 
@@ -65,8 +68,8 @@ export const AssetsSection = ({
 				</div>
 			</div>
 			<hr style={{ backgroundColor: "gray", width: "100%" }} />
-			<div>
-				{file_ids.map((file_id) => (
+			<div style={{ display: "flex", rowGap: "8px", flexDirection: "column" }}>
+				{file_ids.map((file_id, index) => (
 					<div
 						key={file_id}
 						style={{
@@ -76,30 +79,42 @@ export const AssetsSection = ({
 							columnGap: "10px",
 						}}
 					>
-						<b>#{file_id}</b>
+						<b style={{ whiteSpace: "nowrap", width: "200px", overflow: "scroll" }}>
+							#{file_id}: {file_names[index]}
+						</b>
+						<div style={{ display: "flex", alignItems: "center", columnGap: "12px" }}>
+							<Button
+								size="small"
+								onClick={() => download_a_file(file_id)}
+							>
+								<i
+									className="bi bi-cloud-download pr-2"
+									style={{ marginRight: "6px" }}
+								/>
+								<span className="hidden sm:inline-block">Download</span>
+							</Button>
 
-						<Button
-							onClick={() => download_a_file(file_id)}
-							icon="bi bi-cloud-download pr-2"
-						>
-							<span className="hidden sm:inline-block">Download</span>
-						</Button>
-
-						<Button
-							disabled={change_mode === false}
-							severity="danger"
-							onClick={() => {
-								if (
-									window.confirm("Are you sure you wanna UNLINK this file ?") ===
-									false
-								)
-									return;
-								onDelete(file_id);
-							}}
-							icon="bi bi-trash2 pr-2"
-						>
-							<span className="hidden sm:inline-block">Delete</span>
-						</Button>
+							<Button
+								size="small"
+								disabled={change_mode === false}
+								severity="danger"
+								onClick={() => {
+									if (
+										window.confirm(
+											"Are you sure you wanna UNLINK this file ?"
+										) === false
+									)
+										return;
+									onDelete(file_id);
+								}}
+							>
+								<i
+									className="bi bi-trash2 pr-2"
+									style={{ marginRight: "6px" }}
+								/>
+								<span className="hidden sm:inline-block">Delete</span>
+							</Button>
+						</div>
 					</div>
 				))}
 			</div>

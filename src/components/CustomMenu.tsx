@@ -132,7 +132,7 @@ export function CustomMenu({
 						</p>
 						<LineChartWithAreaFill
 							data={user!.exam_records
-								.sort((e1, e2) => e2.time - e1.time)
+								.sort((e1, e2) => e1.time - e2.time)
 								.map((i, index) => i.score)}
 						/>
 					</div>
