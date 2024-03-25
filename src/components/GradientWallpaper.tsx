@@ -1,6 +1,12 @@
 import React from "react";
 
-export const GradientWallpaper = () => {
+export const GradientWallpaper = ({
+	starting_color = "#0700b8",
+	ending_color = "#00ff88",
+}: {
+	starting_color?: string;
+	ending_color?: string;
+}) => {
 	return (
 		<div
 			style={{
@@ -9,7 +15,7 @@ export const GradientWallpaper = () => {
 				left: 0,
 				width: "100vw",
 				height: "100vh",
-				background: "linear-gradient(90deg, #0700b8 0%, #00ff88 100%)",
+				background: `linear-gradient(90deg, ${starting_color} 0%, ${ending_color} 100%)`,
 				zIndex: -1,
 			}}
 		/>

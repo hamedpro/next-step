@@ -1,5 +1,5 @@
 import { WithId } from "mongodb";
-import { node, user } from "./types";
+import { goal_specifier, node, step, user } from "./types";
 import { SHA256 } from "crypto-js";
 import JsFileDownloader from "js-file-downloader";
 import { api_endpoint } from "./src/useCollection";
@@ -117,14 +117,14 @@ export function range(start: number, stop: number) {
 export const sum = (array: number[]) => array.reduce((a, b) => a + b, 0);
 export const avg = (array: number[]) => sum(array) / array.length;
 
-export function calc_user_skill_level(user: user, node_id: string) {
+export function calc_user_skill_level(user_exam_records: user["exam_records"], node_id: string) {
 	/* 
 		returns a number out of 5 stars
 	*/
-	var related_exam_records = user.exam_records.filter((rec) => rec.node_id === node_id);
+	var related_exam_records = user_exam_records.filter((rec) => rec.node_id === node_id);
 	if (related_exam_records.length === 0) return 0;
 
-	return Math.round(avg(related_exam_records.map((rec) => rec.score))) / 20;
+	return Math.round(avg(related_exam_records.map((rec) => rec.score)) / 20);
 }
 export function getTimestampsForNDays(n: number): number[] {
 	const timestamps: number[] = [];
@@ -224,4 +224,85 @@ export function dateCustomStringRepr(date: Date): string {
 	const amPm = date.getHours() >= 12 ? "PM" : "AM";
 
 	return `${year}/${month}/${day} ${hours12}:${minutes} ${amPm}`;
+}
+export function calc_steps_to_be_done(
+	user_exam_records: user["exam_records"],
+	goal_specifier: goal_specifier
+) {
+	var steps_to_be_done: step[] = goal_specifier.map((goal_item) => [
+		goal_item[0],
+		calc_user_skill_level(user_exam_records, goal_item[0]),
+		goal_item[1],
+	]);
+	return steps_to_be_done;
+}
+
+export function goal_timing_helper(
+	user_exam_records: user["exam_records"],
+	goal_specifier: goal_specifier,
+	goal_timing_mode: Exclude<user["goal_timing_mode"], undefined | null>
+) {
+	var steps_to_be_done = calc_steps_to_be_done(user_exam_records, goal_specifier);
+
+	var required_days_count: number;
+	if (goal_timing_mode![0] === "dynamic") {
+		required_days_count = Math.ceil(steps_to_be_done.length / goal_timing_mode![1]);
+	} else {
+		var i = 1;
+		while (true) {
+			if (getTimestampsForNDays(i).includes(goal_timing_mode![1])) {
+				required_days_count = i;
+				break;
+			} else {
+				i++;
+			}
+		}
+	}
+
+	var steps_count_in_each_day: number;
+	if (goal_timing_mode![0] === "dynamic") {
+		steps_count_in_each_day = goal_timing_mode![1];
+	} else {
+		steps_count_in_each_day = Math.ceil(steps_to_be_done.length / required_days_count);
+	}
+
+	var plan_days: { [day_start_timestamp: number]: step[] } = {};
+	getTimestampsForNDays(required_days_count).forEach((day_start_timestamp) => {
+		plan_days[day_start_timestamp] = steps_to_be_done.splice(0, steps_count_in_each_day);
+	});
+	return { plan_days, steps_count_in_each_day, required_days_count };
+}
+export function goal_progress(
+	user_exam_records: user["exam_records"],
+	goal_specifier: goal_specifier
+) {
+	var done_step_units = 0;
+	var remained_step_units = 0;
+	goal_specifier.forEach((i) => {
+		var current = calc_user_skill_level(user_exam_records, i[0]);
+		done_step_units += current;
+		remained_step_units += i[1] - current;
+	});
+
+	return {
+		remained_step_units,
+		done_step_units,
+		done_rounded_percentage: Math.round(
+			(done_step_units / (remained_step_units + done_step_units)) * 100
+		),
+	};
+}
+
+export function user_skill_as_goal_specifier(
+	user_exam_records: user["exam_records"]
+): goal_specifier {
+	var tmp: string[] = [];
+	user_exam_records
+		.map((r) => r.node_id)
+		.forEach((node_id) => {
+			if (tmp.includes(node_id) === false) {
+				tmp.push(node_id);
+			}
+		});
+	return tmp.map((node_id) => [node_id, calc_user_skill_level(user_exam_records, node_id)]);
 }

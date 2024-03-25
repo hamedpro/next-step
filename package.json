@@ -3,6 +3,9 @@
   "dependencies": {
     "@apollo/client": "^3.9.5",
     "@apollo/server": "^4.10.0",
+    "@emotion/react": "^11.11.4",
+    "@emotion/styled": "^11.11.0",
+    "@mui/material": "^5.15.14",
     "@types/cors": "^2.8.17",
     "@types/crypto-js": "^4.2.2",
     "@types/d3-graphviz": "^2.6.7",

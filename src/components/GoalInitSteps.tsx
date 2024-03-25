@@ -3,6 +3,12 @@ import React from "react";
 import { Steps } from "primereact/steps";
 import { MenuItem } from "primereact/menuitem";
 import { useLocation, useNavigate } from "react-router-dom";
+
+import Box from "@mui/material/Box";
+import Stepper from "@mui/material/Stepper";
+import Step from "@mui/material/Step";
+import StepLabel from "@mui/material/StepLabel";
+
 export const GoalInitSteps = () => {
 	var loc = useLocation();
 	var nav = useNavigate();
@@ -22,10 +28,17 @@ export const GoalInitSteps = () => {
 	);
 
 	return (
-		<Steps
-			model={items}
-			activeIndex={options.map((opt) => opt[1]).indexOf(loc.pathname)}
-			readOnly={false}
-		/>
+		<Box sx={{ width: "100%", margin: "32px 0px" }}>
+			<Stepper
+				activeStep={options.findIndex((i) => loc.pathname === i[0]) + 1}
+				alternativeLabel
+			>
+				{options.map((option) => (
+					<Step key={option[1]}>
+						<StepLabel>{option[0]}</StepLabel>
+					</Step>
+				))}
+			</Stepper>
+		</Box>
 	);
 };

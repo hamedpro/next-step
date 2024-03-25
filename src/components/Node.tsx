@@ -345,7 +345,7 @@ export const Node = () => {
 						</h1>
 						<Rating
 							style={{ marginBottom: "20px", fontSize: "40px" }}
-							value={calc_user_skill_level(user, node.id)}
+							value={calc_user_skill_level(user.exam_records, node.id)}
 							disabled={true}
 							cancel={false}
 						/>

@@ -12,6 +12,7 @@ export interface node {
 	parent: string | null;
 	id: string;
 }
+export type goal_specifier = [node_id: string, skill_level: number /* out of 5 */][];
 export interface user {
 	username: string;
 	exam_records: {
@@ -24,7 +25,7 @@ export interface user {
 		| [type: "dynamic", steps_each_day: number]
 		| [type: "static", last_day: number /* timestamp of start of the last day */]
 		| null;
-	goal?: [node_id: string, skill_level: number /* out of 5 */][] | null;
+	goal?: goal_specifier | string /* user_id to live follow his/her goal */ | null;
 	phone_number: string /* 09123456789 */;
 	biography: string;
 }
