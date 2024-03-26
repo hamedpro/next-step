@@ -53,3 +53,35 @@ body {
 	width: 40px;
 	height: 40px;
 }
+#goal_timing_settings_grid_container {
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr 1fr;
+	grid-template-rows: 1fr 1fr;
+	gap: 12px;
+	grid-auto-flow: row;
+	grid-template-areas:
+		"side1 main main main"
+		"side2 main main main";
+	height: 60vh;
+	width: 100%;
+	border-radius: 8px;
+}
+
+#goal_timing_settings_grid_container #side1 {
+	grid-area: side1;
+}
+
+#goal_timing_settings_grid_container #side2 {
+	grid-area: side2;
+}
+
+#goal_timing_settings_grid_container #main {
+	grid-area: main;
+	border-radius: 8px;
+	background: var(--color2_primary);
+	padding: 18px;
+	display: flex;
+	color: var(--color1_secondary);
+	flex-direction: column;
+	row-gap: 8px;
+}

@@ -30,7 +30,7 @@ export const GoalInitSteps = () => {
 	return (
 		<Box sx={{ width: "100%", margin: "32px 0px" }}>
 			<Stepper
-				activeStep={options.findIndex((i) => loc.pathname === i[0]) + 1}
+				activeStep={options.findIndex((i) => loc.pathname === i[1])}
 				alternativeLabel
 			>
 				{options.map((option) => (
